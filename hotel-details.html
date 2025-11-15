@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Hotel Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/details.css">
+    <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon">
+</head>
+<body class="detail-page">
+    <div class="nav-bar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="index.html" id="home"><img src="/images/logo.png" alt="Home"></a>
+            </div>
+            <div class="nav-middle">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Search for hotels...">
+                    <button class="search-btn" id="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <div class="nav-right">
+                <a href="#" id="openLoginBtn">Login/Sign-up</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="search-results-container">
+        <div id="search-results"></div>
+        
+        <div class="modal-overlay" id="loginModal">
+            <div class="auth-box">
+                <button class="close-modal" id="closeModal">&times;</button>
+                <div class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Login</button>
+                    <button class="auth-tab" data-tab="signup">Sign Up</button>
+                    <button class="auth-tab" data-tab="forgot" id="forgotTab">Forgot Password</button>
+                </div>
+                <div class="auth-form active" id="login-form">
+                    <h1>Welcome Back</h1>
+                    <form action="#" id="loginForm">
+                        <div class="input-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        </div>
+                        <div class="login-options">
+                            <div class="remember-me">
+                                <input type="checkbox" id="remember">
+                                <label for="remember">Remember me</label>
+                            </div>
+                            <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="auth-btn">Sign In</button>
+                        <div class="divider">OR</div>
+                        <div class="social-login">
+                            <div class="social-btn" title="Login with Google"><i class="fab fa-google"></i></div>
+                            <div class="social-btn" title="Login with Facebook"><i class="fab fa-facebook-f"></i></div>
+                            <div class="social-btn" title="Login with Apple"><i class="fab fa-apple"></i></div>
+                        </div>
+                        <div class="switch-form">
+                            Don't have an account? <a href="#" id="showSignupForm">Sign Up</a>
+                        </div>
+                    </form>
+                </div>
+                <div class="auth-form" id="signup-form">
+                    <h1>Create Account</h1>
+                    <form action="#" id="signupForm">
+                        <div class="input-group">
+                            <label for="fullname">Full Name</label>
+                            <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="new-username">Username</label>
+                            <input type="text" id="new-username" name="new-username" placeholder="Choose a username" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="new-password">Password</label>
+                            <input type="password" id="new-password" name="new-password" placeholder="Create a password" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+                        </div>
+                        <div class="terms">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+                        </div>
+                        <button type="submit" class="auth-btn">Create Account</button>
+                        <div class="divider">OR</div>
+                        <div class="social-login">
+                            <div class="social-btn" title="Sign up with Google"><i class="fab fa-google"></i></div>
+                            <div class="social-btn" title="Sign up with Facebook"><i class="fab fa-facebook-f"></i></div>
+                            <div class="social-btn" title="Sign up with Apple"><i class="fab fa-apple"></i></div>
+                        </div>
+                        <div class="switch-form">
+                            Already have an account? <a href="#" id="showLoginForm">Login</a>
+                        </div>
+                    </form>
+                </div>
+                <div class="auth-form" id="forgot-form">
+                    <h1>Reset Password</h1>
+                    <p class="form-description">Enter your email address below and we'll send you a link to reset your password.</p>
+                    <form action="#" id="forgotPasswordForm">
+                        <div class="input-group">
+                            <label for="recovery-email">Email Address</label>
+                            <input type="email" id="recovery-email" name="recovery-email" placeholder="Enter your email" required>
+                        </div>
+                        <button type="submit" class="auth-btn">Send Reset Link</button>
+                        <div class="switch-form">
+                            Remembered your password? <a href="#" id="backToLoginForm">Back to Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <main>
+        <div id="detail-loading" class="loading-overlay">
+            <div class="loading-spinner"></div>
+            <p>Loading luxury experience...</p>
+        </div>
+        
+        <div id="hotel-detail-container" class="container">
+            <!-- Hotel content will be dynamically inserted here -->
+        </div>
+        
+        <!-- Swiper gallery template (cloned via JS) -->
+        <template id="hotel-gallery-template">
+            <div class="hotel-gallery">
+                <div class="swiper hotel-gallery-main">
+                    <div class="swiper-wrapper">
+                        <!-- Slides injected by JS -->
+                    </div>
+                    <div class="swiper-button-prev gallery-nav-prev"></div>
+                    <div class="swiper-button-next gallery-nav-next"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <div class="swiper hotel-gallery-thumbs">
+                    <div class="swiper-wrapper">
+                        <!-- Thumbnails injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </template>
+        
+        <div id="booking-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Reserve Your Stay</h2>
+                <div class="calendar-container">
+                    <div class="date-picker">
+                        <div class="date-selection">
+                            <div class="check-in">
+                                <label>Check In</label>
+                                <input type="date" id="check-in-date">
+                            </div>
+                            <div class="check-out">
+                                <label>Check Out</label>
+                                <input type="date" id="check-out-date">
+                            </div>
+                        </div>
+                        <div class="guests-selection">
+                            <label>Guests</label>
+                            <select id="guests-count">
+                                <option value="1">1 Guest</option>
+                                <option value="2" selected>2 Guests</option>
+                                <option value="3">3 Guests</option>
+                                <option value="4">4 Guests</option>
+                                <option value="5">5 Guests</option>
+                                <option value="6">6+ Guests</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="room-type-section"></div>
+                    <div class="booking-summary">
+                        <h3>Reservation Summary</h3>
+                        <div class="summary-details">
+                            <div class="summary-row">
+                                <span>Room Rate:</span>
+                                <span id="summary-rate">$0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Taxes & Fees:</span>
+                                <span id="summary-taxes">$0.00</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Total:</span>
+                                <span id="summary-total">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="complete-booking" class="btn-primary"><span>Complete Reservation</span></button>
+                    <p class="booking-note">No deposit required - pay at the property</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="gallery-modal" class="modal">
+            <div class="modal-content gallery">
+                <span class="close-modal">&times;</span>
+                <h2>Photo Gallery</h2>
+                <div class="gallery-container">
+                    <div class="gallery-main">
+                        <img id="gallery-featured" src="" alt="Featured Photo">
+                        <button class="gallery-nav prev"><i class="fas fa-chevron-left"></i></button>
+                        <button class="gallery-nav next"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="gallery-thumbnails"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="write-review-form">
+                <h3 class="form-title">Share Your Luxury Experience</h3>
+                <form id="review-form">
+                    <div class="rating-input">
+                        <label>Your Overall Rating</label>
+                        <div class="star-input" id="rating-stars">
+                            <i class="fas fa-star" data-rating="1"></i>
+                            <i class="fas fa-star" data-rating="2"></i>
+                            <i class="fas fa-star" data-rating="3"></i>
+                            <i class="fas fa-star" data-rating="4"></i>
+                            <i class="fas fa-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                    <div class="review-form-group">
+                        <label for="review-title">Review Title</label>
+                        <input type="text" id="review-title" placeholder="Summarize your stay in a few words">
+                    </div>
+                    <div class="review-form-group">
+                        <label for="review-content">Your Review</label>
+                        <textarea id="review-content" placeholder="Share details of your luxurious experience at this property"></textarea>
+                    </div>
+                    <div class="review-form-group">
+                        <label>Add Photos (Optional)</label>
+                        <div class="photo-upload">
+                            <label for="photo-input" class="photo-upload-btn">
+                                <i class="fas fa-camera"></i> Choose Photos
+                            </label>
+                            <input type="file" id="photo-input" multiple style="display:none">
+                            <div class="upload-preview" id="photo-preview"></div>
+                        </div>
+                    </div>
+                    <div class="review-form-actions">
+                        <button type="button" id="cancel-review-btn" class="cancel-review-btn">Cancel</button>
+                        <button type="submit" class="submit-review-btn">Submit Review</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/details.js"></script>
+</body>
+</html>

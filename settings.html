@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New York Hotel Reservation Website</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/setting.css">
+    <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon">
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="nav-container">
+            <!-- Left side - Logo -->
+            <div class="nav-left">
+                <a href="index.html" id="home"><img src="/images/logo.png" alt="Home"></a>
+            </div>
+            
+            <!-- Middle - Search bar -->
+            <div class="nav-middle">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Search for hotels...">
+                    <button class="search-btn" id="search-btn">🔎︎</button>
+                </div>
+            </div>
+            
+            <!-- Right side - Contact & Login -->
+            <div class="nav-right">
+                <a href="#" id="openLoginBtn">Login/Sign-up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multi-purpose Auth Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="auth-box">
+            <button class="close-modal" id="closeModal">&times;</button>
+            
+            <!-- Tab Navigation -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+                <button class="auth-tab" data-tab="forgot" id="forgotTab">Forgot Password</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="auth-form active" id="login-form">
+                <h1>Welcome Back</h1>
+                <form action="#" id="loginForm">
+                    <div class="input-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                    
+                    <div class="login-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot Password?</a>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn">Sign In</button>
+                    
+                    <div class="divider">OR</div>
+                    
+                    <div class="social-login">
+                        <div class="social-btn" title="Login with Google">G</div>
+                        <div class="social-btn" title="Login with Facebook">f</div>
+                        <div class="social-btn" title="Login with Apple">a</div>
+                    </div>
+                    
+                    <div class="switch-form">
+                        Don't have an account? <a href="#" id="showSignupForm">Sign Up</a>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Sign Up Form -->
+            <div class="auth-form" id="signup-form">
+                <h1>Create Account</h1>
+                <form action="#" id="signupForm">
+                    <div class="input-group">
+                        <label for="fullname">Full Name</label>
+                        <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="new-username">Username</label>
+                        <input type="text" id="new-username" name="new-username" placeholder="Choose a username" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="new-password">Password</label>
+                        <input type="password" id="new-password" name="new-password" placeholder="Create a password" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+                    </div>
+                    
+                    <div class="terms">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn">Create Account</button>
+                    
+                    <div class="divider">OR</div>
+                    
+                    <div class="social-login">
+                        <div class="social-btn" title="Sign up with Google">G</div>
+                        <div class="social-btn" title="Sign up with Facebook">f</div>
+                        <div class="social-btn" title="Sign up with Apple">a</div>
+                    </div>
+                    
+                    <div class="switch-form">
+                        Already have an account? <a href="#" id="showLoginForm">Login</a>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Forgot Password Form -->
+            <div class="auth-form" id="forgot-form">
+                <h1>Reset Password</h1>
+                <p class="form-description">Enter your email address below and we'll send you a link to reset your password.</p>
+                <form action="#" id="forgotPasswordForm">
+                    <div class="input-group">
+                        <label for="recovery-email">Email Address</label>
+                        <input type="email" id="recovery-email" name="recovery-email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn">Send Reset Link</button>
+                    
+                    <div class="switch-form">
+                        Remembered your password? <a href="#" id="backToLoginForm">Back to Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+        <main class="settings-page">
+        <div class="container">
+            <h1 class="page-title">Account Settings</h1>
+            
+            <div class="settings-layout">
+                <!-- Sidebar Navigation -->
+                <div class="settings-sidebar">
+                    <div class="profile-summary">
+                        <div class="profile-avatar">
+                            <img src="images/default-profile.jpg" alt="Profile" id="sidebar-profile-img">
+                            <button class="change-photo-btn"><i class="fas fa-camera">✎</i></button>
+                        </div>
+                        <div class="profile-name" id="sidebar-user-name">John Doe</div>
+                        <div class="profile-email" id="sidebar-user-email">john.doe@example.com</div>
+                    </div>
+
+                    <nav class="settings-nav">
+                        <ul>
+                            <li data-section="profile" class="active"><i class="fas fa-user"></i> Profile</li>
+                            <li data-section="security"><i class="fas fa-lock"></i> Security</li>
+                            <li data-section="reservations"><i class="fas fa-calendar-alt"></i> Reservations</li>
+                            <li data-section="account"><i class="fas fa-cog"></i> Account</li>
+                        </ul>
+                    </nav>
+                </div>
+                
+                <!-- Settings Content -->
+                <div class="settings-content">
+                    <!-- Profile Section -->
+                    <section id="profile-section" class="settings-section active">
+                        <h2 class="section-title">Profile Information</h2>
+                        <div class="settings-card">
+                            <form id="profile-form">
+                                <div class="form-group">
+                                    <label for="profile-first-name">First Name</label>
+                                    <input type="text" id="profile-first-name" name="firstName" class="form-input" value="John">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-last-name">Last Name</label>
+                                    <input type="text" id="profile-last-name" name="lastName" class="form-input" value="Doe">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-gender">Gender</label>
+                                    <select id="profile-gender" name="gender" class="form-input">
+                                        <option value="">Select</option>
+                                        <option value="male" selected>Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                        <option value="prefer-not-to-say">Prefer not to say</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-birthdate">Date of Birth</label>
+                                    <input type="date" id="profile-birthdate" name="birthdate" class="form-input" value="1990-01-15">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-email">Email</label>
+                                    <input type="email" id="profile-email" name="email" class="form-input" value="john.doe@example.com">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-phone">Phone Number</label>
+                                    <input type="tel" id="profile-phone" name="phone" class="form-input" value="+1 (555) 123-4567">
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                    
+                    <!-- Security Section -->
+                    <section id="security-section" class="settings-section">
+                        <h2 class="section-title">Security</h2>
+                        <div class="settings-card">
+                            <h3 class="card-title">Password</h3>
+                            <form id="password-form">
+                                <div class="form-group">
+                                    <label for="current-password">Current Password</label>
+                                    <input type="password" id="current-password" name="currentPassword" class="form-input">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="new-password">New Password</label>
+                                    <input type="password" id="new-password" name="newPassword" class="form-input">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="confirm-password">Confirm New Password</label>
+                                    <input type="password" id="confirm-password" name="confirmPassword" class="form-input">
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Update Password</button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                    
+                    <!-- Reservations Section -->
+                    <section id="reservations-section" class="settings-section">
+                        <h2 class="section-title">Reservation History</h2>
+                        <div class="settings-card">
+                            <div class="reservation-filters">
+                                <div class="filter-group">
+                                    <label for="reservation-filter">Filter</label>
+                                    <select id="reservation-filter" class="form-input">
+                                        <option value="all" selected>All Reservations</option>
+                                        <option value="upcoming">Upcoming</option>
+                                        <option value="past">Past</option>
+                                        <option value="canceled">Canceled</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="reservations-list">
+                                <!-- Upcoming Reservation -->
+                                <div class="reservation-item upcoming">
+                                    <div class="reservation-header">
+                                        <div class="reservation-status">Confirmed</div>
+                                        <div class="reservation-id">Confirmation #LH28573</div>
+                                    </div>
+                                    <div class="reservation-details">
+                                        <div class="hotel-info">
+                                            <img src="images/hotel-thumbnail1.jpg" alt="Hotel" class="hotel-thumbnail">
+                                            <div class="hotel-details">
+                                                <h4 class="hotel-name">Luxury Hotel Paris</h4>
+                                                <p class="room-type">Deluxe Suite</p>
+                                                <p class="reservation-dates">Nov 14 - Nov 15, 2025</p>
+                                            </div>
+                                        </div>
+                                        <div class="reservation-actions">
+                                            <button class="btn btn-outline btn-sm">Modify</button>
+                                            <button class="btn btn-danger btn-sm">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Past Reservation -->
+                                <div class="reservation-item past">
+                                    <div class="reservation-header">
+                                        <div class="reservation-status">Completed</div>
+                                        <div class="reservation-id">Confirmation #LH19428</div>
+                                    </div>
+                                    <div class="reservation-details">
+                                        <div class="hotel-info">
+                                            <img src="images/hotel-thumbnail2.jpg" alt="Hotel" class="hotel-thumbnail">
+                                            <div class="hotel-details">
+                                                <h4 class="hotel-name">Luxury Hotel London</h4>
+                                                <p class="room-type">Executive Room</p>
+                                                <p class="reservation-dates">Oct 5 - Oct 10, 2025</p>
+                                            </div>
+                                        </div>
+                                        <div class="reservation-actions">
+                                            <button class="btn btn-outline btn-sm">View Details</button>
+                                            <button class="btn btn-primary btn-sm">Book Again</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Cancelled Reservation -->
+                                <div class="reservation-item canceled">
+                                    <div class="reservation-header">
+                                        <div class="reservation-status">Canceled</div>
+                                        <div class="reservation-id">Confirmation #LH15234</div>
+                                    </div>
+                                    <div class="reservation-details">
+                                        <div class="hotel-info">
+                                            <img src="images/hotel-thumbnail3.jpg" alt="Hotel" class="hotel-thumbnail">
+                                            <div class="hotel-details">
+                                                <h4 class="hotel-name">Luxury Hotel New York</h4>
+                                                <p class="room-type">Premium Suite</p>
+                                                <p class="reservation-dates">Sep 22 - Sep 25, 2025</p>
+                                            </div>
+                                        </div>
+                                        <div class="reservation-actions">
+                                            <button class="btn btn-primary btn-sm">Book Again</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="pagination">
+                                <button class="pagination-btn prev disabled"><i class="fas fa-chevron-left">←</i></button>
+                                <div class="pagination-numbers">
+                                    <span class="pagination-current">1</span> of <span class="pagination-total">1</span>
+                                </div>
+                                <button class="pagination-btn next disabled"><i class="fas fa-chevron-right">→</i></button>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Account Section -->
+                    <section id="account-section" class="settings-section">
+                        <h2 class="section-title">Account Preferences</h2>
+                        
+                        <div class="settings-card">
+                            <h3 class="card-title">Notifications</h3>
+                            <div class="notification-preferences">
+                                <div class="notification-option">
+                                    <div class="option-details">
+                                        <h4>Email Notifications</h4>
+                                        <p>Receive emails about your reservations, special offers, and account updates.</p>
+                                    </div>
+                                    <div class="toggle-switch">
+                                        <input type="checkbox" id="email-notifications" class="toggle-input" checked>
+                                        <label for="email-notifications" class="toggle-label"></label>
+                                    </div>
+                                </div>
+                                
+                                <div class="notification-option">
+                                    <div class="option-details">
+                                        <h4>SMS Notifications</h4>
+                                        <p>Receive text messages for reservation confirmations and important updates.</p>
+                                    </div>
+                                    <div class="toggle-switch">
+                                        <input type="checkbox" id="sms-notifications" class="toggle-input">
+                                        <label for="sms-notifications" class="toggle-label"></label>
+                                    </div>
+                                </div>
+                                
+                                <div class="notification-option">
+                                    <div class="option-details">
+                                        <h4>Marketing Communications</h4>
+                                        <p>Receive promotional offers, travel inspiration, and news about Luxury Hotels.</p>
+                                    </div>
+                                    <div class="toggle-switch">
+                                        <input type="checkbox" id="marketing-notifications" class="toggle-input" checked>
+                                        <label for="marketing-notifications" class="toggle-label"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-card danger-zone">
+                            <h3 class="card-title">Danger Zone</h3>
+                            <div class="danger-options">
+                                <div class="danger-option">
+                                    <div class="option-details">
+                                        <h4>Log Out From All Devices</h4>
+                                        <p>This will sign you out from all browsers and devices where you're currently logged in.</p>
+                                    </div>
+                                    <button class="btn btn-outline btn-warning">Log Out Everywhere</button>
+                                </div>
+                                
+                                <div class="danger-option">
+                                    <div class="option-details">
+                                        <h4>Delete Account</h4>
+                                        <p>Permanently delete your account and all data associated with it. This action cannot be undone.</p>
+                                    </div>
+                                    <button class="btn btn-danger" id="delete-account-btn">Delete Account</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Modal for Profile Photo Upload -->
+    <div class="modal" id="photo-upload-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Change Profile Photo</h3>
+                <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-area">
+                    <div class="upload-preview">
+                        <img src="images/default-profile.jpg" alt="Preview" id="photo-preview">
+                    </div>
+                    <div class="upload-controls">
+                        <input type="file" id="photo-upload" accept="image/*" hidden>
+                        <button class="btn btn-outline" id="upload-trigger">Choose Photo</button>
+                        <button class="btn btn-danger" id="remove-photo">Remove Photo</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-upload">Cancel</button>
+                <button class="btn btn-primary" id="save-photo">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal for Account Deletion Confirmation -->
+    <div class="modal" id="delete-account-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Your Account</h3>
+                <button class="close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p class="warning-text">Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
+                <p>All your personal information, reservation history, and preferences will be permanently deleted from our systems.</p>
+                
+                <div class="confirmation-check">
+                    <input type="checkbox" id="delete-confirm">
+                    <label for="delete-confirm">I understand that this action is permanent and cannot be reversed.</label>
+                </div>
+                
+                <div class="password-confirm">
+                    <label for="delete-password">Please enter your password to confirm</label>
+                    <input type="password" id="delete-password" class="form-input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-delete">Cancel</button>
+                <button class="btn btn-danger" id="confirm-delete" disabled>Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/common.js"></script>
+    <script src="./js/setting.js"></script>
+</body>
+</html>

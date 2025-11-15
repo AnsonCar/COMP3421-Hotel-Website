@@ -1,0 +1,89 @@
+,ean_hotel_id,name,address1,city,state_province,postal_code,latitude,longitude,star_rating,high_rate,low_rate
+114,482259,Topping Rose House,One Bridgehampton - Sag Harbor Turnpike,Bridgehampton,NY,11932,40.9378,-72.30069,4.5,995.39,295.39
+185,556612,The William Vale Hotel,111 North 12th Street,Brooklyn,NY,11249,40.72243,-73.9573,5.0,659.37,299.37
+191,606740,1 Hotel Brooklyn Bridge,60 Furman Street,Brooklyn,NY,11201,40.70164,-73.99553,5.0,893.13,297.0
+635,235192,The Whiteface Lodge,7 Whiteface Inn Ln,Lake Placid,NY,12946,44.29686,-74.00878,4.5,474.29,398.84
+709,486516,The Boro Hotel,38-28 27th Street,Long Island City,NY,11101,40.75455,-73.93583,4.5,209.41,149.41
+789,116103,Blakely New York,136 W 55th St,New York,NY,10019,40.76366,-73.97965,4.5,206.46,205.46
+799,438630,WestHouse New York,201 West 55th Street,New York,NY,10019,40.76442,-73.98144,5.0,510.49,370.23
+801,226121,The Westin New York at Times Square,270 W 43rd Street,New York,NY,10036,40.75779,-73.98902,4.5,309.45,304.45
+806,424023,Refinery Hotel,63 W 38th St,New York,NY,10018,40.75211,-73.98546,5.0,439.37,279.37
+809,199889,W New York - Times Square,1567 Broadway At 47th St,New York,NY,10036,40.75936,-73.98512,4.5,616.6,381.61
+811,416820,The Westin New York Grand Central,212 East 42nd Street,New York,NY,10017,40.75041,-73.97378,4.5,679.1567,499.1459
+821,439332,Viceroy Central Park New York,120 W 57th St,New York,NY,10019,40.76479,-73.97831,5.0,779.08,209.27
+828,115902,New York Marriott Marquis,1535 Broadway,New York,NY,10036,40.75823,-73.98546,4.5,640.41,310.41
+832,339013,Kimpton Hotel Eventi,851 Avenue of the Americas,New York,NY,10001,40.74719,-73.9897,5.0,699.17,499.17
+834,324226,Andaz Wall Street - a concept by Hyatt,75 Wall St,New York,NY,10005,40.70503,-74.00762,4.5,292.1304,242.1499
+835,203969,The Premier New York Times Square,133 W 44th St,New York,NY,10036,40.75671,-73.98448,4.5,329.24,215.19
+839,348293,NoMo SoHo,9 Crosby Street,New York,NY,10013,40.71992,-74.0003,4.5,945.19,375.18
+840,340156,InterContinental - New York Times Square,300 W 44th St,New York,NY,10036,40.75874,-73.98932,4.5,789.17,369.15
+848,126106,The Kitano New York,66 Park Ave,New York,NY,10016,40.74962,-73.97962,4.5,539.0279,269.014
+849,109362,Omni Berkshire Place,21 E 52nd Street,New York,NY,10022,40.75927,-73.97502,4.5,1000.21,1000.0
+854,163820,Hotel Sofitel New York,45 W 44th St,New York,NY,10036,40.75561,-73.9819,4.5,1036.1801,223.2
+861,367406,The Gotham Hotel,16 E 46th St,New York,NY,10017,40.75566,-73.97814,4.5,679.0,221.0
+862,390179,TRYP By Wyndham Times Square South,345 W 35th Street,New York,NY,10001,40.75359,-73.99473,4.5,399.21,269.0
+867,349751,Andaz 5th Avenue - a concept by Hyatt,485 5th Ave,New York,NY,10017,40.75287,-73.98134,4.5,845.06,345.0
+876,200065,Le Parker Meridien New York,119 W. 56th Street,New York,NY,10019,40.76409,-73.97873,4.5,479.42,239.42
+883,353129,The James New York,27 Grand St,New York,NY,10013,40.72284,-74.00471,4.5,595.0,295.0
+892,125509,Loews Regency New York Hotel,540 Park Avenue,New York,NY,10065,40.76446,-73.96885,5.0,999.4,479.4
+899,109318,Lotte New York Palace,455 Madison Ave,New York,NY,10022,40.75823,-73.97453,4.5,1195.41,349.41
+901,383834,Dream Downtown,355 W 16th St,New York,NY,10011,40.74195,-74.00369,4.5,5000.3501,299.36
+904,112923,Waldorf Astoria New York,301 Park Avenue,New York,NY,10022,40.75658,-73.97432,4.5,280.4,210.4
+905,325735,Trump Soho New York,246 Spring Street,New York,NY,10013,40.72563,-74.00558,5.0,1905.3199,345.32
+931,469458,Gansevoort Park Avenue NYC,420 Park Ave South,New York,NY,10016,40.74386,-73.98377,4.5,710.23,275.17
+936,171177,The Kimpton Muse Hotel,130 W 46th St,New York,NY,10036,40.75798,-73.98362,4.5,579.46,278.46
+938,341910,W New York - Downtown,8 Albany Street,New York,NY,10006,40.70946,-74.01394,4.5,389.19,179.45
+939,374895,Hotel 48LEX New York,517 Lexington Avenue,New York,NY,10017,40.75525,-73.9732,4.5,1539.38,339.06
+947,125511,Warwick New York,65 W 54th St,New York,NY,10019,40.76226,-73.97826,4.5,339.05,269.04
+948,274141,Kimpton Ink48 Hotel,653 11th Avenue,New York,NY,10036,40.76445,-73.99569,4.5,639.15,440.15
+969,219391,The Benjamin,125 E 50th St,New York,NY,10022,40.75638,-73.97209,4.5,449.49,353.12
+972,106394,JW Marriott Essex House New York,160 Central Park S,New York,NY,10019,40.76652,-73.97825,4.5,1499.02,314.02
+973,117363,The London NYC,151 W 54th St,New York,NY,10019,40.76328,-73.98065,4.5,2579.1799,299.06
+976,231553,"The Pierre, A Taj Hotel, New York",2 E 61st St,New York,NY,10065,40.76534,-73.97222,5.0,1075.46,489.46
+980,169343,Conrad New York,102 North End Avenue,New York,NY,10282,40.71505,-74.01601,5.0,461.0829,269.0617
+983,120829,Royalton Times Square,44 W 44th St,New York,NY,10036,40.75571,-73.98216,4.5,349.0528,219.0322
+993,197983,Hotel Chandler,12 E 31st St,New York,NY,10016,40.74617,-73.98508,4.5,519.1,269.1
+1008,130744,The Michelangelo Hotel,152 W 51st St,New York,NY,10019,40.76165,-73.98265,4.5,629.34,379.34
+1012,129023,"The Carlyle, A Rosewood Hotel",35 E 76th St,New York,NY,10021,40.77461,-73.96338,5.0,4100.04,730.03
+1019,125871,San Carlos Hotel,150 E 50th St,New York,NY,10022,40.75607,-73.97134,4.5,389.76,309.41
+1020,114697,Gramercy Park Hotel,2 Lexington Ave,New York,NY,10010,40.73848,-73.9855,5.0,529.0,329.0
+1021,152696,"Gild Hall, A Thompson Hotel",15 Gold Street,New York,NY,10038,40.70795,-74.00711,4.5,558.6078,408.561
+1022,174141,W New York - Union Square,201 Park Ave S,New York,NY,10003,40.73653,-73.98899,4.5,689.8068,433.8948
+1023,219368,The Surrey,20 E 76th St,New York,NY,10021,40.77449,-73.96387,5.0,1945.49,595.0
+1031,113922,Hotel Plaza Athenee,37 E 64th St,New York,NY,10065,40.76642,-73.96844,5.0,1199.37,548.37
+1032,118630,The Lowell,28 East 63rd Street,New York,NY,10065,40.76587,-73.9691,5.0,2085.46,795.46
+1037,200004,the Quin,101 West 57th Street at Sixth Avenue,New York,NY,10019,40.76426,-73.97707,5.0,860.1313,279.0433
+1043,277344,"Smyth, A Thompson Hotel",85 West Broadway,New York,NY,10007,40.71525,-74.00943,5.0,620.23,475.23
+1045,141417,The Peninsula New York,700 Fifth Avenue at 55th street,New York,NY,10019,40.76165,-73.9749,5.0,3145.22,795.21
+1050,105314,The Plaza Hotel,Fifth Avenue at Central Park South,New York,NY,10019,40.76424,-73.97388,5.0,3225.1599,725.17
+1053,196447,"The Ritz-Carlton New York, Battery Park",2 West St,New York,NY,10004,40.7053,-74.01722,5.0,1695.3,365.3
+1058,198683,The Sherry Netherland,781 5th Ave,New York,NY,10022,40.76453,-73.97285,4.5,1169.3199,529.31
+1062,356439,"The Chatwal, a Luxury Collection Hotel, New York City",130 W. 44th Street,New York,NY,10036,40.75668,-73.98445,5.0,3406.3999,695.39
+1064,131734,Four Seasons Hotel New York,57 E 57th Street,New York,NY,10022,40.76197,-73.97158,5.0,4061.209,4060.209
+1067,211803,"Mandarin Oriental, New York",80 Columbus Circle at 60th Street,New York,NY,10023,40.76919,-73.98283,5.0,3993.45,694.7334
+1072,370651,The Towers at Lotte New York Palace,455 Madison Avenue,New York,NY,10022,40.75814,-73.97536,5.0,1199.916,476.9539
+1074,183435,The Towers of the Waldorf Astoria New York,100 E 50th St,New York,NY,10022,40.75691,-73.97335,5.0,10000.0,1099.0
+1075,123947,Trump International Hotel & Tower New York,1 Central Park W,New York,NY,10023,40.76905,-73.98125,5.0,2155.302,476.1801
+1076,106256,"The Ritz-Carlton New York, Central Park",50 Central Park S,New York,NY,10019,40.76552,-73.97589,5.0,3495.5322,695.0901
+1081,309378,The St. Regis New York,Two East 55th St,New York,NY,10022,40.7615,-73.97451,5.0,1360.34,743.34
+1082,117020,The Mark,Madison Ave at 77th Street,New York,NY,10075,40.77515,-73.96343,5.0,3488.48,518.47
+1085,451663,Park Hyatt New York,153 West 57th Street,New York,NY,10019,40.76515,-73.97912,5.0,2950.4485,725.1063
+1086,352611,"Langham Place, New York, Fifth Avenue",400 Fifth Avenue,New York,NY,10018,40.75009,-73.98337,5.0,2000.1801,695.18
+1090,445763,Archer Hotel New York,45 West 38th St,New York,NY,10018,40.75186,-73.98488,4.5,369.47,319.47
+1095,448418,Hotel Hugo,525 Greenwich Street,New York,NY,10013,40.72649,-74.00906,4.5,408.6471,318.7251
+1102,484183,The Knickerbocker Hotel,6 Times Square,New York,NY,10036,40.75575,-73.98626,5.0,585.32,335.32
+1108,106208,InterContinental New York Barclay,111 East 48th Street,New York,NY,10017,40.75543,-73.97373,4.5,589.0305,380.0196
+1109,557438,INNSIDE New York NoMad,132 West 27th Street,New York,NY,10001,40.74618,-73.99275,4.5,909.139,309.0489
+1110,487932,Baccarat Hotel and Residences New York,28 West 53rd Street,New York,NY,10019,40.76095,-73.97718,5.0,2100.1899,800.0
+1111,453134,The Marmara Park Avenue,114 East 32nd Street,New York,NY,10016,40.74526,-73.98163,5.0,505.71,405.71
+1113,532245,Safehouse Suites Manhattan,1600 Broadway,New York,NY,10019,40.76037,-73.98467,5.0,10888.5,5990.25
+1121,481441,1 Hotel Central Park,1414 Avenue of the Americas,New York,NY,10019,40.76483,-73.97685,5.0,880.44,613.04
+1123,507704,The New York EDITION,5 Madison Avenue,New York,NY,10010,40.74139,-73.98759,5.0,1150.02,697.03
+1127,480680,Hotel Indigo Lower East Side New York,171 Ludlow Street,New York,NY,10002,40.72174,-73.9875,4.5,469.0,324.7217
+1135,460019,Jet Luxury at the Trump SoHo,246 Spring Street,New York,NY,10013,40.72562,-74.00546,5.0,901.7,483.11
+1157,601517,Four Seasons New York Downtown,27 Barclay St,New York,NY,10007,40.71254,-74.00931,5.0,1500.15,579.16
+1163,563115,11 Howard,11 Howard Street,New York,NY,10013,40.71925,-73.99999,5.0,519.0772,319.0472
+1165,569437,"The Beekman, A Thompson Hotel",123 Nassau Street,New York,NY,10038,40.71137,-74.00669,5.0,419.5237,418.5237
+1178,647656,Gansevoort Meatpacking,18 9th Avenue at 13th street,New York,NY,10018,40.73989,-74.00579,4.5,545.45,285.45
+1518,493919,Castle Hotel & Spa,400 Benedict Avenue,Tarrytown,NY,10591,41.06767,-73.84709,4.5,709.5836,599.493
+1600,324657,"The Ritz-Carlton New York, Westchester",3 Renaissance Square,White Plains,NY,10601,41.03257,-73.76664,5.0,479.4042,349.2972

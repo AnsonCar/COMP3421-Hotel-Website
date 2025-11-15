@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New York Hotel Reservation</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="./css/contact.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="nav-container">
+            <!-- Left Section - Logo -->
+            <div class="nav-left">
+                <a id="home" href="index.html"><img src="/images/logo.png" alt="New York Hotel Reservation"></a>
+            </div>
+            
+            <!-- Middle Section - Search -->
+            <div class="nav-middle">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Search for hotels...">
+                    <button id="search-btn" class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            
+            <!-- Right Section - Navigation Links -->
+            <div class="nav-right">
+                <a href="#" id="openLoginBtn">Login/Sign-up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page Content -->
+    <main class="contact-page">
+        <div class="contact-header">
+            <h1>Get In Touch</h1>
+            <p>We're here to make your stay in New York unforgettable. Reach out to us with any questions, special requests, or to learn more about our luxury accommodations.</p>
+        </div>
+
+        <div class="contact-container">
+            <!-- Contact Form Section -->
+            <section class="contact-form-section">
+                <div class="success-message" id="success-message">
+                    <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                    <h3>Message Sent Successfully!</h3>
+                    <p>Thank you for contacting us. We'll get back to you shortly.</p>
+                </div>
+
+                <div class="contact-form-header">
+                    <h2>Send Us a Message</h2>
+                    <p>We'd love to hear from you. Please fill out the form below.</p>
+                </div>
+
+                <form class="contact-form" id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number (Optional)</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Inquiry Subject</label>
+                        <select id="subject" name="subject" required>
+                            <option value="" disabled selected>Select a subject</option>
+                            <option value="Reservation">Reservation Inquiry</option>
+                            <option value="Special Request">Special Request</option>
+                            <option value="Feedback">Feedback</option>
+                            <option value="Complaint">Complaint</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+
+                    <button type="submit">Send Message</button>
+                </form>
+            </section>
+
+            <!-- Contact Information Section -->
+            <section class="contact-info-section">
+                <div class="contact-info-card">
+                    <h3>Contact Information</h3>
+                    <ul class="contact-details">
+                        <li>
+                            <span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+                            <span class="contact-text">
+                                <strong>Main Office</strong>
+                                350 Fifth Avenue, Empire State Building<br>
+                                New York, NY 10118
+                            </span>
+                        </li>
+                        <li>
+                            <span class="contact-icon"><i class="fas fa-phone-alt"></i></span>
+                            <span class="contact-text">
+                                <strong>Phone</strong>
+                                Reservations: +1 (212) 555-1234<br>
+                                Customer Service: +1 (212) 555-5678
+                            </span>
+                        </li>
+                        <li>
+                            <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+                            <span class="contact-text">
+                                <strong>Email</strong>
+                                reservations@nyhotels.com<br>
+                                support@nyhotels.com
+                            </span>
+                        </li>
+                    </ul>
+
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div class="contact-info-card">
+                    <h3>Business Hours</h3>
+                    <ul class="business-hours">
+                        <li>
+                            <span class="day">Monday - Friday</span>
+                            <span class="hours">9:00 AM - 9:00 PM</span>
+                        </li>
+                        <li>
+                            <span class="day">Saturday</span>
+                            <span class="hours">10:00 AM - 6:00 PM</span>
+                        </li>
+                        <li>
+                            <span class="day">Sunday</span>
+                            <span class="hours">12:00 PM - 5:00 PM</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9832350212927!2d-73.98797892346886!3d40.748440471396404!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1698628511048!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="auth-box">
+            <button id="closeModal" class="close-modal">×</button>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+                <button class="auth-tab" data-tab="forgot">Forgot Password</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="auth-form active" id="login-form">
+                <h1>Welcome Back</h1>
+                
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    
+                    <div class="login-options">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        
+                        <a href="#" id="forgotPasswordLink" class="forgot-password">Forgot Password?</a>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn">Sign In</button>
+                </form>
+                
+                <div class="divider">OR</div>
+                
+                <div class="social-login">
+                    <button class="social-btn" aria-label="Login with Google">G</button>
+                    <button class="social-btn" aria-label="Login with Facebook">f</button>
+                    <button class="social-btn" aria-label="Login with Apple">a</button>
+                </div>
+                
+                <div class="switch-form">
+                    Don't have an account? <a href="#" id="showSignupForm">Sign Up</a>
+                </div>
+            </div>
+            
+            <!-- Sign Up Form -->
+            <div class="auth-form" id="signup-form">
+                <h1>Create Account</h1>
+                
+                <form id="signupForm">
+                    <div class="input-group">
+                        <label for="fullname">Full Name</label>
+                        <input type="text" id="fullname" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="new-username">Username</label>
+                        <input type="text" id="new-username" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="new-password">Password</label>
+                        <input type="password" id="new-password" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" required>
+                    </div>
+                    
+                    <div class="terms">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn">Create Account</button>
+                </form>
+                
+                <div class="divider">OR</div>
+                
+                <div class="social-login">
+                    <button class="social-btn" aria-label="Signup with Google">G</button>
+                    <button class="social-btn" aria-label="Signup with Facebook">f</button>
+                    <button class="social-btn" aria-label="Signup with Apple">a</button>
+                </div>
+                
+                <div class="switch-form">
+                    Already have an account? <a href="#" id="showLoginForm">Login</a>
+                </div>
+            </div>
+            
+            <!-- Forgot Password Form -->
+            <div class="auth-form" id="forgot-form">
+                <h1>Reset Password</h1>
+                <p class="form-description">Enter your email address below and we'll send you a link to reset your password.</p>
+                
+                <form id="forgotPasswordForm">
+                    <div class="input-group">
+                        <label for="recovery-email">Email Address</label>
+                        <input type="email" id="recovery-email" required>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn">Send Reset Link</button>
+                </form>
+                
+                <div class="switch-form">
+                    Remembered your password? <a href="#" id="backToLoginForm">Back to Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/common.js"></script>
+    <script src="./js/contact.js"></script>
+</body>
+</html>

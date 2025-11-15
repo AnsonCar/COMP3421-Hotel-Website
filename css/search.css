@@ -1,0 +1,443 @@
+/* Add this to style the search results container */
+.search-results-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 180px auto 80px; /* Top margin to clear navbar */
+    padding: 20px;
+
+}
+
+/* Style the search results header */
+.search-results-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.search-results-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    color: #D4AF37;
+    margin-bottom: 10px;
+}
+
+.search-results-header p {
+    font-family: 'Anonymous Pro', monospace;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.query {
+    color: #D4AF37;
+    font-weight: bold;
+}
+  
+.hotel {
+    width: 90%;
+    max-width: 800px;
+    margin: 30px auto;
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(15, 15, 15, 0.95));
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.hotel-card {
+    cursor: pointer;
+    width: 85%;
+    height: 40%;
+    max-width: 750px;
+    margin-top: 10px;
+    margin-left: 5%;
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(15, 15, 15, 0.95));
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: center;
+    z-index: 1;
+}
+.hotel-card:hover {
+    transform: scale(1.05);
+    width: 90%;
+    max-width: 800px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    border-color: rgba(212, 175, 55, 0.5);
+    z-index: 10;
+}
+
+.hotel-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0);
+    transition: background 0.2s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.hotel-card-image {
+    left:15%;
+    overflow: hidden;
+    position: relative;
+}
+
+.hotel-card-image img {
+    width: 70%;
+    height: 50%;
+    object-fit: cover;
+    transition: transform 1s ease;
+}
+
+.hotel-info {
+    padding: 25px;
+    position: relative;
+}
+
+.hotel-card .hotel-address {
+    color: #666;
+    font-size: 0.9em;
+    margin: 2px 0 8px 0;
+}
+
+.hotel-card .hotel-price {
+    font-weight: 700;
+    color: #D4AF37;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.hotel-card .hotel-price span {
+    font-weight: normal;
+    font-size: 0.85em;
+    color: #666;
+}
+
+/* Make sure the hotel cards have proper padding */
+.hotel-card .hotel-info {
+    padding: 15px;
+}
+
+/* Enhanced styling for star rating display */
+.hotel-card .hotel-rating {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(212, 175, 55, 0.9);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.hotel-card .hotel-rating i {
+    font-size: 0.85em;
+    margin-left: 2px;
+}
+
+.hotel-info::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50px;
+    height: 2px;
+    background-color: rgba(212, 175, 55, 0.5);
+    transform: translateX(-50%);
+}
+
+.hotel-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #D4AF37;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+
+
+.hotel-location {
+    font-family: 'Anonymous Pro', monospace;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.hotel-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: white;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.hotel-price span {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: normal;
+}
+
+.hotel-rate-range {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 10px 0 20px;
+    padding: 0 20px;
+}
+
+.view-hotel-btn {
+    display: block;
+    width: 80%;
+    margin: 20px auto 5px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.2));
+    color: #D4AF37;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-align: center;
+    cursor: pointer;
+}
+
+.view-hotel-btn:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.3));
+    border-color: rgba(212, 175, 55, 0.6);
+    color: white;
+}
+
+#back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(212, 175, 55, 0.2);
+    color: #D4AF37;
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+
+#back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+#back-to-top:hover {
+    background: rgba(212, 175, 55, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Pagination Styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 40px auto;
+    padding: 10px;
+    font-family: 'Anonymous Pro', monospace;
+}
+
+.pagination-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 40px;
+    height: 40px;
+    margin: 0 5px;
+    padding: 0 12px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn:hover:not(.disabled):not(.ellipsis) {
+    background: linear-gradient(to bottom, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.3));
+    border-color: rgba(212, 175, 55, 0.5);
+    color: #D4AF37;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.pagination-btn.active {
+    background: linear-gradient(to bottom, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.4));
+    border-color: rgba(212, 175, 55, 0.6);
+    color: #D4AF37;
+    font-weight: bold;
+}
+
+.pagination-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-btn.ellipsis {
+    cursor: default;
+}
+
+.pagination-input {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+}
+
+.pagination-input span {
+    margin: 0 10px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.pagination-input input {
+    width: 50px;
+    height: 36px;
+    padding: 0 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: white;
+    font-family: 'Anonymous Pro', monospace;
+    text-align: center;
+}
+
+.pagination-input input:focus {
+    outline: none;
+    border-color: rgba(212, 175, 55, 0.5);
+}
+
+.pagination-input button {
+    height: 36px;
+    margin-left: 5px;
+    padding: 0 15px;
+    background: linear-gradient(to bottom, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.3));
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 4px;
+    color: #D4AF37;
+    font-family: 'Anonymous Pro', monospace;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pagination-input button:hover {
+    background: linear-gradient(to bottom, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.4));
+    border-color: rgba(212, 175, 55, 0.5);
+}
+
+/* Results info styles */
+.results-info {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Anonymous Pro', monospace;
+    font-size: 14px;
+    margin: 20px 0;
+}
+
+.results-info strong {
+    color: rgba(212, 175, 55, 0.8);
+    font-weight: bold;
+}
+
+/* Loading indicator */
+.loading {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(212, 175, 55, 0.3);
+    border-top: 3px solid #D4AF37;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments for pagination */
+@media (max-width: 768px) {
+    .pagination-btn {
+        min-width: 35px;
+        height: 35px;
+        margin: 0 3px;
+    }
+    
+    .pagination-input {
+        width: 100%;
+        justify-content: center;
+        margin-top: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pagination-btn {
+        min-width: 30px;
+        height: 30px;
+        font-size: 12px;
+        padding: 0 8px;
+    }
+    
+    .pagination {
+        margin: 30px auto;
+    }
+}
+
+/* Page overlay for transitions */
+.page-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.page-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
