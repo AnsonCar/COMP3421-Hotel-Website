@@ -1,0 +1,33 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./dockerfile
+    container_name: ${PROJECT_NAME}-frontend
+    ports:
+      - 80:80
+      
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: ./dockerfile
+  #   container_name: ${PROJECT_NAME}-frontend
+  #   ports:
+  #     - 80:80
+  
+  pgsql:
+    image: postgres:13
+    container_name: ${PROJECT_NAME}-pgsql
+    ports:
+      - 5432:5432
+    env_file:
+      - ./backend/envs/.env
+    volumes:
+      - db_data:/var/lib/postgresql/data/pgdata
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    restart: always
+
+volumes:
+  db_data:
+    name: ${PROJECT_NAME}-db-data

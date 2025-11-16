@@ -1,0 +1,11 @@
+FROM nginx:1.23.1-alpine
+WORKDIR /app
+COPY . .
+
+WORKDIR /www
+
+COPY . .
+
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
