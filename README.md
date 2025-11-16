@@ -1,83 +1,78 @@
+# COMP3421 Final Project – Hostels Reservation Website Outline
+
+## Group Members
+
+1. Ho Siu Wang, 24036797d (Frontend)
+2. Lai Yuen Wang, 24138896d (Backend)
+
 ## Background
 
-As online booking platforms are growing rapidlyand becoming the trend, touristsare more willing to make reservationsthrough these platforms instead of booking byphonecall, whereonline platformsbring along with convenient, transparent, and trustworthy. New York City is one of the heat tourism spotsamong USA province, with millions of domestic and international visitors every year.Despite there are variety of hostel booking platform, only a few even none of them focuses on the quality of the hotels.In this project, thewebsite is designed to provide a comprehensive booking system andserve travelers seeking premium hotel accommodationsin New York City.
+Online booking platforms are growing rapidly. Tourists prefer them for convenience, transparency, and trust. New York City is a top tourism destination with millions of visitors annually. Few platforms focus exclusively on premium (4-star+) hotels. This project creates a high-end hotel booking website for NYC luxury accommodations.
 
 ## Purposes
 
-### High-classHotel Reservation ServiceThe
+### High-class Hotel Reservation Service
 
-platform exclusively focuseson 4-star and above hotels in New York City to ensure a qualified selection that satisfies the needs of high-spending customers.Partner hotels will be verifiedin order toensureauthenticity, high-quality imagery, and consistent service standards.
+- Exclusively 4-star and above hotels in New York City
+- Verified partner hotels with authentic high-quality imagery
+- Consistent premium service standards
 
 ### Seamless Transactions Experience
 
-The platform will provide secure, fast, and user-friendly booking processes, minimizing steps from search to confirmation. Reliable and general payment methods and gateways will be integrated intothe platform.Automated confirmation emailsandreceipts featureswill ensure smooth post-booking communication.
+- Secure, fast, user-friendly booking process
+- Reliable payment gateways
+- Automated confirmation emails and receipts
 
 ## Potential Stakeholders
 
-### Travelers/ Customers
+| Stakeholder              | Description                                        |
+| ------------------------ | -------------------------------------------------- |
+| Travelers / Customers    | High-spending individuals seeking premium services |
+| Hotel Partners (4★+ NYC) | Businesses listing properties on the platform      |
 
-High-spending individuals seeking reliable and premium booking services.
+## Client-Side Components
 
-### Hotel Partners(4-star and above in NYC)
+### 1. Website Architecture
 
-Businesses listing their properties on the platform.
+- **Frontend Layer**: HTML, CSS, JavaScript – handles UI, search, booking, account management
+- **Backend Layer**: Node.js – processes logic, bridges frontend and database
+- **Database Layer**: MySQL – stores hotels, users, bookings, reviews
 
-## Client-SideComponents
+### 2. Website Pages
 
-### Architecture
+| Page                   | Description                    | Main Features                                           |
+| ---------------------- | ------------------------------ | ------------------------------------------------------- |
+| Home                   | Landing page                   | Search function, Featured premium listings              |
+| Hotel Lists            | Filtered hotel results         | Sorting & filter panel, Scrollable list                 |
+| Hotel Details          | Selected hotel profile         | Room types & prices, Ratings & reviews, Interactive map |
+| Booking / Checkout     | Complete reservation & payment | Input validation                                        |
+| User Dashboard         | View bookings & manage profile | Update details, Booking history & status                |
+| Login / Create Account | Authentication & registration  | Detect user status, Retrieve from DB                    |
+| Forgot Password        | Reset password                 | Update password in DB                                   |
+| Contact / Support      | Customer support & feedback    | Inquiry form, FAQs                                      |
 
-- Frontend Layer
-  This handles what users can find and seeonthe website and interaction with the site,such as searching hotels, making bookings, and managing accounts. It visualises the backend datain order todisplay the corresponding account information and hotel details.
+## Server-Side Components
 
-- Backend Layer
-  The backend plays an important role as a bridge between the frontend and the database, which is responsible for processing requests, performing logic, and sending structured data back to the frontend.
+### 1. Database (MySQL)
 
-- Database Layer
-  This layer'sgoal is to store and retrieve hotel listings, user info, and bookrecords while ensuringhigh data integrity and quick access during user operations.Figure 1Website Architecture
+Tables:
 
-### Server-SideComponents
+- Users
+- Hotels
+- Bookings
+- Reviews
 
-```sql
-CREATE TABLE Users (
-    user_id INT PRIMARY KEY,
-    first_name VARCHAR(25) NOT NULL,
-    last_name VARCHAR(25) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL
-);
+(ER Diagram: Hotels ← Bookings → Users ← Reviews)
 
-CREATE TABLE Hotels (
-    hotel_id INT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    address VARCHAR(255) NOT NULL,
-    star_rating INT CHECK (star_rating BETWEEN 1 AND 5),
-    user_rating INT CHECK (user_rating BETWEEN 1 AND 5),
-    room_type VARCHAR(25) NOT NULL,
-    price_per_night DECIMAL(10,2) NOT NULL,
-    description TEXT
-);
+### 2. Scripts (Node.js)
 
-CREATE TABLE Reviews (
-    review_id INT PRIMARY KEY,
-    user_id INT NOT NULL,
-    hotel_id INT NOT NULL,
-    user_rating INT CHECK (user_rating BETWEEN 1 AND 5),
-    comment TEXT,
-    time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (hotel_id) REFERENCES Hotels(hotel_id)
-);
+| Layer         | Purpose                        | Files                | Description                         |
+| ------------- | ------------------------------ | -------------------- | ----------------------------------- |
+| Controller    | Validate input, business rules | userController.js    | Registration, login, reset password |
+|               |                                | hotelController.js   | Retrieve hotels, filters            |
+|               |                                | bookingController.js | Create bookings                     |
+| Model         | Execute SQL queries            | userModel.js         | User CRUD                           |
+|               |                                | hotelModel.js        | Hotel listing & details             |
+| Configuration | DB connection setup            | db.js                | MySQL connection & credentials      |
 
-CREATE TABLE Bookings (
-    booking_id INT PRIMARY KEY,
-    user_id INT NOT NULL,
-    hotel_id INT NOT NULL,
-    check_in_date DATE NOT NULL,
-    check_out_date DATE NOT NULL,
-    guests INT NOT NULL CHECK (guests > 0),
-    status ENUM('pending', 'confirmed') DEFAULT 'pending',
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (hotel_id) REFERENCES Hotels(hotel_id),
-    CHECK (check_out_date > check_in_date)
-);
-```
+_Note: Original document contains figures (architecture diagram, page hierarchy tree, ER diagram) which cannot be reproduced here._
