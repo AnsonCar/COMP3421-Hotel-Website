@@ -138,18 +138,42 @@ if (loginModal && openLoginBtn && closeModal) {
     
     const forgotPasswordForm = document.getElementById('forgotPasswordForm');
     if (forgotPasswordForm) {
-        forgotPasswordForm.addEventListener('submit', function(e) {
+        forgotPasswordForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             // Get form data
-            const email = document.getElementById('recovery-email').value;
-            
-            // Here you would typically send the data to a server to handle password reset
-            console.log(`Password reset requested for: ${email}`);
-            
-            // Simulate successful request
-            alert(`Password reset link has been sent to ${email}. Please check your inbox.`);
-            switchToTab('login');
+            const email = document.getElementById('recovery-email').value.trim();
+
+            if (!email) {
+                alert('Please enter your email address.');
+                return;
+            }
+
+            try {
+                // Send forgot password request to API
+                const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || `HTTP error! status: ${response.status}`);
+                }
+
+                // Success
+                alert(data.message || `Password reset link has been sent to ${email}. Please check your inbox.`);
+                switchToTab('login');
+            } catch (error) {
+                console.error('Forgot password error:', error);
+                alert('Failed to send password reset request. Please try again later.');
+            }
         });
     }
 }

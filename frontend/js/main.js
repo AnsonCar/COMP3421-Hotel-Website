@@ -142,7 +142,7 @@ async function loadFeaturedLuxuryHotels() {
     showLoadingState(featuredContainer);
 
     try {
-        const response = await fetch('http://localhost:3000/api/hotels/featured');
+        const response = await fetch(`${API_BASE_URL}/api/hotels/featured`);
 
         if (!response.ok) {
             throw new Error(`Failed to load featured hotels: ${response.status} ${response.statusText}`);

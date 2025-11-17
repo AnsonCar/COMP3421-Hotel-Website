@@ -28,25 +28,58 @@ document.addEventListener('DOMContentLoaded', function() {
     const profileForm = document.getElementById('profile-form');
 
     if (profileForm) {
-        profileForm.addEventListener('submit', function (e) {
+        profileForm.addEventListener('submit', async function (e) {
             e.preventDefault();
+
+            if (!AuthToken.isValid()) {
+                showNotification('Please log in to update your profile', 'error');
+                return;
+            }
 
             const firstName = document.getElementById('profile-first-name')?.value.trim() ?? '';
             const lastName = document.getElementById('profile-last-name')?.value.trim() ?? '';
             const email = document.getElementById('profile-email')?.value.trim() ?? '';
 
-            const sidebarUserName = document.getElementById('sidebar-user-name');
-            if (sidebarUserName) sidebarUserName.textContent = `${firstName} ${lastName}`;
+            if (!firstName || !lastName || !email) {
+                showNotification('All fields are required', 'error');
+                return;
+            }
 
-            const sidebarUserEmail = document.getElementById('sidebar-user-email');
-            if (sidebarUserEmail) sidebarUserEmail.textContent = email;
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${AuthToken.get()}`
+                    },
+                    body: JSON.stringify({
+                        firstName,
+                        lastName,
+                        email
+                    })
+                });
 
-            const navUserName = document.getElementById('nav-user-name');
-            if (navUserName) navUserName.textContent = firstName;
+                const data = await response.json();
 
-            simulateAPICall()
-                .then(() => showNotification('Changes saved successfully!', 'success'))
-                .catch(() => showNotification('Failed to update profile', 'error'));
+                if (!response.ok) {
+                    throw new Error(data.error || `HTTP error! status: ${response.status}`);
+                }
+
+                // Update UI
+                const sidebarUserName = document.getElementById('sidebar-user-name');
+                if (sidebarUserName) sidebarUserName.textContent = `${firstName} ${lastName}`;
+
+                const sidebarUserEmail = document.getElementById('sidebar-user-email');
+                if (sidebarUserEmail) sidebarUserEmail.textContent = email;
+
+                const navUserName = document.getElementById('nav-user-name');
+                if (navUserName) navUserName.textContent = firstName;
+
+                showNotification('Profile updated successfully!', 'success');
+            } catch (error) {
+                console.error('Profile update error:', error);
+                showNotification('Failed to update profile', 'error');
+            }
         });
     }
         
@@ -56,29 +89,58 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmInput = document.getElementById('confirm-password');
     
     if (passwordForm) {
-        passwordForm.addEventListener('submit', function (e) {
+        passwordForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
+            if (!AuthToken.isValid()) {
+                showNotification('Please log in to change your password', 'error');
+                return;
+            }
+
             const currentPassword = document.getElementById('current-password')?.value.trim() ?? '';
+            const newPassword = document.getElementById('new-password')?.value.trim() ?? '';
+            const confirmPassword = document.getElementById('confirm-password')?.value.trim() ?? '';
 
             if (!currentPassword) {
                 showNotification('Please enter your current password', 'error');
                 return;
             }
 
-            if (passwordInput !== confirmInput) {
-                showNotification('New passwords and Confirm password do not match', 'error');
+            if (!newPassword) {
+                showNotification('Please enter a new password', 'error');
                 return;
             }
 
-            simulateAPICall()
-                .then(() => {
-                    showNotification('Password updated successfully', 'success');
-                    passwordForm.reset();
-                })
-                .catch(() => {
-                    showNotification('Failed to update password', 'error');
+            if (newPassword !== confirmPassword) {
+                showNotification('New passwords do not match', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/password`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${AuthToken.get()}`
+                    },
+                    body: JSON.stringify({
+                        currentPassword,
+                        newPassword
+                    })
                 });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || `HTTP error! status: ${response.status}`);
+                }
+
+                showNotification('Password updated successfully', 'success');
+                passwordForm.reset();
+            } catch (error) {
+                console.error('Password change error:', error);
+                showNotification(error.message || 'Failed to update password', 'error');
+            }
         });
     }
     
@@ -209,22 +271,41 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if (confirmDeleteBtn) {
-        confirmDeleteBtn.addEventListener('click', function() {
+        confirmDeleteBtn.addEventListener('click', async function() {
             const deletePassword = document.getElementById('delete-password').value;
-            
+
             if (!deletePassword) {
                 showNotification('Please enter your password to confirm', 'error');
                 return;
             }
-            
-            simulateAPICall()
-                .then(() => {
-                    showNotification('Your account has been deleted. You will be redirected to the homepage.', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 3000);
-                })
-                .catch(() => showNotification('Failed to delete account. Please check your password.', 'error'));
+
+            if (!AuthToken.isValid()) {
+                showNotification('Please log in to delete your account', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/account`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${AuthToken.get()}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error || `HTTP error! status: ${response.status}`);
+                }
+
+                showNotification('Your account has been deleted. You will be redirected to the homepage.', 'success');
+                AuthToken.remove(); // Clear token
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 3000);
+            } catch (error) {
+                console.error('Account deletion error:', error);
+                showNotification(error.message || 'Failed to delete account. Please check your password.', 'error');
+            }
         });
     }
     

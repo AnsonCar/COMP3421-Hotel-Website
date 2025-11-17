@@ -15,20 +15,21 @@ document.addEventListener('DOMContentLoaded', function() {
         searchInput.value = searchQuery;
     }
     
-    // Load CSV data and perform search
+    // Load hotel data and perform search
     loadHotelData()
-        .then(hotelDatabase => {
+        .then(apiHotels => {
+            const hotelDatabase = processHotelData(apiHotels);
             // Perform the search
             const searchResults = searchHotels(searchQuery, hotelDatabase);
             displaySearchResultsWithPagination(searchResults, searchQuery);
-            
+
             // Handle new search button click
             if(searchBtn) {
                 searchBtn.addEventListener('click', function() {
                     performSearch(hotelDatabase);
                 });
             }
-            
+
             // Handle Enter key in search input
             if(searchInput) {
                 searchInput.addEventListener('keypress', function(e) {
@@ -55,81 +56,42 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Function to load hotel data from CSV
+// Function to load hotel data from API
 async function loadHotelData() {
     try {
-        const response = await fetch('/data/star_ny_hotel.csv');
-        
+        const response = await fetch(`${API_BASE_URL}/api/hotels`);
+
         if (!response.ok) {
             throw new Error(`Failed to load hotel data: ${response.status} ${response.statusText}`);
         }
-        
-        const csvData = await response.text();
-        return parseCSV(csvData);
+
+        const data = await response.json();
+        return data.hotels || [];
     } catch (error) {
-        console.error('Error loading CSV:', error);
+        console.error('Error loading hotel data:', error);
         throw error;
     }
 }
 
-// Parse the CSV data into an array of hotel objects
-function parseCSV(csv) {
-    const lines = csv.split('\n');
-    const headers = lines[0].split(',').map(header => 
-        header.replace(/"/g, '').trim()
-    );
-    
-    const hotels = [];
-    
-    for (let i = 1; i < lines.length; i++) {
-        // Skip empty lines
-        if (lines[i].trim() === '') continue;
-        
-        // Handle commas within quoted fields properly
-        let line = lines[i];
-        const values = [];
-        let inQuotes = false;
-        let currentValue = '';
-        
-        for (let j = 0; j < line.length; j++) {
-            const char = line[j];
-            
-            if (char === '"') {
-                inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) {
-                values.push(currentValue.trim());
-                currentValue = '';
-            } else {
-                currentValue += char;
-            }
-        }
-        
-        // Add the last value
-        values.push(currentValue.trim());
-        
-        // Create hotel object
-        const hotel = {};
-        for (let j = 0; j < headers.length && j < values.length; j++) {
-            let value = values[j].replace(/"/g, '').trim();
-            
-            // Convert numeric values
-            if (!isNaN(parseFloat(value)) && isFinite(value)) {
-                value = parseFloat(value);
-            }
-            
-            hotel[headers[j]] = value;
-        }
-        
-        // Only include hotels with star_rating >= 4.5 (luxury hotels)
-        if (hotel.star_rating >= 4.5) {
-            // Add an appropriate luxury image based on star rating
-            hotel.image = getHotelImage(hotel.star_rating);
-        
-            hotels.push(hotel);
-        }
-    }
-    
-    return hotels;
+// Process hotel data from API response
+function processHotelData(hotels) {
+    return hotels
+        .filter(hotel => hotel.starRating >= 4.5) // Only luxury hotels
+        .map(hotel => ({
+            ...hotel,
+            // Add image based on star rating
+            image: getHotelImage(hotel.starRating),
+            // Map API fields to expected frontend fields
+            ean_hotel_id: hotel.hotelId,
+            name: hotel.name,
+            address1: hotel.address,
+            city: 'New York', // Default for now
+            state_province: 'NY', // Default for now
+            star_rating: hotel.starRating,
+            low_rate: hotel.pricePerNight,
+            high_rate: hotel.pricePerNight * 1.2, // Add some variation
+            user_rating: hotel.userRating
+        }));
 }
 
 // Function to get a luxury hotel image based on star rating

@@ -128,37 +128,59 @@ async function loadHotelDetails(hotelId) {
     }
 }
 
-// Get hotel by ID from CSV data
+// Get hotel by ID from API
 async function getHotelById(hotelId) {
     try {
-        // Fetch the CSV file
-        const response = await fetch('/data/star_ny_hotel.csv');
-        const csvText = await response.text();
-        
-        // Parse CSV
-        const hotels = parseCSV(csvText);
-        
-        // Find the hotel with matching ean_hotel_id
-        const hotel = hotels.find(hotel => hotel.ean_hotel_id === hotelId);
-        
+        const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}`);
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                return null; // Hotel not found
+            }
+            throw new Error(`Failed to fetch hotel: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const hotel = data.hotel;
+        const reviews = data.reviews || [];
+
         if (!hotel) {
             return null;
         }
-        
-        // Generate random reviews for the hotel
-        hotel.reviews = getRandomReviews(parseFloat(hotel.star_rating));
-        
-        // Add room options based on hotel class
-        hotel.rooms = generateRoomOptions(hotel);
-        
-        // Add location data
-        hotel.location = {
-            latitude: parseFloat(hotel.latitude),
-            longitude: parseFloat(hotel.longitude),
-            landmarks: generateNearbyLandmarks(hotel)
+
+        // Process hotel data to match frontend expectations
+        const processedHotel = {
+            ...hotel,
+            // Map API fields to expected frontend fields
+            ean_hotel_id: hotel.hotelId,
+            name: hotel.name,
+            address1: hotel.address,
+            city: 'New York', // Default for now
+            state_province: 'NY', // Default for now
+            star_rating: hotel.starRating,
+            low_rate: hotel.pricePerNight,
+            high_rate: hotel.pricePerNight * 1.2, // Add some variation
+            user_rating: hotel.userRating,
+            reviews: reviews.map(review => ({
+                ...review,
+                rating: review.userRating,
+                date: new Date(review.time).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                })
+            })),
+            // Add room options based on hotel data
+            rooms: generateRoomOptions(hotel),
+            // Add location data
+            location: {
+                latitude: 40.7128, // Default NYC coordinates
+                longitude: -74.0060,
+                landmarks: generateNearbyLandmarks(hotel)
+            }
         };
-        
-        return hotel;
+
+        return processedHotel;
     } catch (error) {
         console.error("Error fetching hotel data:", error);
         return null;
@@ -213,29 +235,31 @@ function parseCSV(csvText) {
 
 // Generate amenities based on star rating
 function generateAmenities(starRating) {
+    const rating = typeof starRating === 'object' ? starRating.starRating || parseFloat(starRating.star_rating) : starRating;
+
     const basicAmenities = ["WiFi", "Air Conditioning", "Room Service"];
     const midTierAmenities = ["Fitness Center", "Restaurant", "Business Center", "Laundry Service"];
     const highTierAmenities = ["Spa", "Swimming Pool", "Concierge Service", "Valet Parking"];
     const luxuryAmenities = ["Fine Dining Restaurant", "Rooftop Bar", "Luxury Car Service", "Butler Service", "Private Beach Access"];
-    
+
     let amenities = [...basicAmenities];
-    
-    
-    if (starRating <5) {
+
+
+    if (rating < 5) {
         amenities = [...amenities, ...highTierAmenities];
     }
-    
-    if (starRating == 5) {
-        amenities = [...amenities, ...luxuryAmenities.slice(0, Math.floor((starRating - 4) * 4))];
+
+    if (rating == 5) {
+        amenities = [...amenities, ...luxuryAmenities.slice(0, Math.floor((rating - 4) * 4))];
     }
-    
+
     return amenities;
 }
 
 // Generate room options based on hotel information
 function generateRoomOptions(hotel) {
-    const starRating = parseFloat(hotel.star_rating);
-    const basePrice = hotel.low_rate;
+    const starRating = hotel.starRating || parseFloat(hotel.star_rating);
+    const basePrice = hotel.pricePerNight || hotel.low_rate;
     
     const rooms = [
         {
@@ -275,7 +299,7 @@ function generateRoomOptions(hotel) {
 
 // Generate hotel description
 function generateDescription(hotel) {
-    const starRating = parseFloat(hotel.star_rating);
+    const starRating = hotel.starRating || parseFloat(hotel.star_rating);
     const neighborhoodText = hotel.neighborhood ? `in the heart of ${hotel.neighborhood}` : "in a prime location";
     
     let description;
@@ -526,8 +550,8 @@ function renderHotelDetails(hotel) {
     const { sliderImages } = buildGalleryImageSet();
 
     const avgRating = calculateAverageRating(hotel.reviews);
-    const lowPrice = hotel.low_rate.toLocaleString('en-US');
-    const highPrice = hotel.high_rate.toLocaleString('en-US');
+    const lowPrice = (hotel.pricePerNight || hotel.low_rate).toLocaleString('en-US');
+    const highPrice = ((hotel.pricePerNight || hotel.low_rate) * 1.2).toLocaleString('en-US');
 
     detailContainer.innerHTML = `
         <!-- Hotel Header Section -->
@@ -537,7 +561,7 @@ function renderHotelDetails(hotel) {
                     <h1>${hotel.name}</h1>
                     <div class="hotel-rating">
                         <div class="star-rating">
-                            ${generateStarRating(parseFloat(hotel.star_rating))}
+                            ${generateStarRating(hotel.starRating || parseFloat(hotel.star_rating))}
                         </div>
                         <div class="review-count">
                             ${avgRating} (${hotel.reviews.length} reviews)
@@ -545,7 +569,7 @@ function renderHotelDetails(hotel) {
                     </div>
                     <div class="hotel-location">
                         <i class="fas fa-map-marker-alt"></i>
-                        ${hotel.address || ""}, ${hotel.city || "New York"}, ${hotel.state_province || "NY"}
+                        ${hotel.address || hotel.address1 || ""}, ${hotel.city || "New York"}, ${hotel.state_province || "NY"}
                     </div>
                 </div>
             </div>
@@ -563,7 +587,7 @@ function renderHotelDetails(hotel) {
                 <div class="content-section">
                     <h2 class="section-title">About This Property</h2>
                     <div class="hotel-description">
-                        <p>${hotel.description}</p>
+                        <p>${hotel.description || generateDescription(hotel)}</p>
                     </div>
                 </div>
                 
@@ -571,7 +595,7 @@ function renderHotelDetails(hotel) {
                 <div class="content-section">
                     <h2 class="section-title">Amenities</h2>
                     <div class="amenities-grid">
-                        ${generateAmenitiesHTML(hotel.amenities)}
+                        ${generateAmenitiesHTML(hotel.amenities || generateAmenities(hotel))}
                     </div>
                 </div>
                 
@@ -856,14 +880,14 @@ function generateReviewsHTML(reviews, limit = 3) {
     if (!reviews || !Array.isArray(reviews) || reviews.length === 0) {
         return '<p>No reviews available yet. Be the first to review this property!</p>';
     }
-    
+
     // Limit the number of reviews initially displayed
     const displayedReviews = reviews.slice(0, limit);
-    
+
     return displayedReviews.map(review => {
         // Generate star rating display
-        const ratingStars = generateStarRating(review.rating);
-        
+        const ratingStars = generateStarRating(review.rating || review.userRating);
+
         // Generate review photos if available
         let photosHTML = '';
         if (review.photos && review.photos.length > 0) {
@@ -877,24 +901,33 @@ function generateReviewsHTML(reviews, limit = 3) {
                 </div>
             `;
         }
-        
+
+        // Format date
+        let dateStr = review.date;
+        if (review.time) {
+            dateStr = new Date(review.time).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
         return `
             <div class="review-card">
                 <div class="reviewer-info">
                     <div class="reviewer-avatar">
-                        <img src="${review.avatar || '/images/default-avatar.jpg'}" alt="${review.name}">
+                        <img src="${review.avatar || avatarImagePool[Math.floor(Math.random() * avatarImagePool.length)] || '/images/default-avatar.jpg'}" alt="${review.firstName || review.name || 'Reviewer'}">
                     </div>
                     <div>
-                        <h4 class="reviewer-name">${review.name}</h4>
-                        <div class="review-date">${review.date}</div>
+                        <h4 class="reviewer-name">${review.firstName ? `${review.firstName} ${review.lastName || ''}`.trim() : (review.name || 'Anonymous')}</h4>
+                        <div class="review-date">${dateStr}</div>
                     </div>
                 </div>
                 <div class="review-rating">
                     ${ratingStars}
                 </div>
-                <h3 class="review-title">${review.title}</h3>
                 <div class="review-content">
-                    <p>${review.content}</p>
+                    <p>${review.comment || review.content || 'No comment provided.'}</p>
                 </div>
                 ${photosHTML}
                 <div class="review-reaction">
@@ -1411,14 +1444,69 @@ function openBookingModal(roomName, roomPrice) {
         const newButton = completeButton.cloneNode(true);
         completeButton.parentNode.replaceChild(newButton, completeButton);
         
-        newButton.addEventListener('click', function() {
+        newButton.addEventListener('click', async function() {
             if (!selectedRoomInfo.name) {
                 alert('Please select a room first.');
                 return;
             }
-            
-            alert('Thank you for your reservation! A confirmation has been sent to your email.');
-            closeAllModals();
+
+            // Check if user is logged in
+            if (!AuthToken.isValid()) {
+                alert('Please log in to make a reservation.');
+                return;
+            }
+
+            // Get dates
+            const checkInInput = document.getElementById('check-in-date');
+            const checkOutInput = document.getElementById('check-out-date');
+
+            if (!checkInInput || !checkOutInput || !checkInInput.value || !checkOutInput.value) {
+                alert('Please select check-in and check-out dates.');
+                return;
+            }
+
+            // Get hotel ID
+            const urlParams = new URLSearchParams(window.location.search);
+            const hotelId = urlParams.get('id');
+
+            if (!hotelId) {
+                alert('Hotel ID not found.');
+                return;
+            }
+
+            // Get guests count
+            const guestsSelect = document.getElementById('guests-count');
+            const guests = guestsSelect ? parseInt(guestsSelect.value) : 2;
+
+            try {
+                // Submit booking to API
+                const response = await fetch(`${API_BASE_URL}/api/bookings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${AuthToken.get()}`
+                    },
+                    body: JSON.stringify({
+                        hotelId: parseInt(hotelId),
+                        checkInDate: checkInInput.value,
+                        checkOutDate: checkOutInput.value,
+                        guests: guests
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || `HTTP error! status: ${response.status}`);
+                }
+
+                alert('Thank you for your reservation! A confirmation has been sent to your email.');
+                closeAllModals();
+
+            } catch (error) {
+                console.error('Booking submission error:', error);
+                alert('Failed to complete reservation. Please try again later.');
+            }
         });
     }
 }
@@ -1877,77 +1965,76 @@ function handlePhotoUpload() {
     }
 }
 
-function submitReview() {
+async function submitReview() {
+    // Check if user is logged in
+    if (!AuthToken.isValid()) {
+        alert('Please log in to submit a review.');
+        return;
+    }
+
     // Get form values
     const ratingStars = document.getElementById('rating-stars');
     const rating = ratingStars.getAttribute('data-selected');
-    const title = document.getElementById('review-title').value.trim();
     const content = document.getElementById('review-content').value.trim();
-    
+
     // Basic validation
     if (!rating || rating === '0') {
         alert('Please select a rating.');
         return;
     }
-    
-    if (!title) {
-        alert('Please enter a review title.');
-        return;
-    }
-    
+
     if (!content) {
         alert('Please enter your review.');
         return;
     }
-    
-    // In a real app, you would submit this to a server
-    // For demo purposes, we'll just show a success message and add the review to the page
-    alert('Thank you for your review! It has been submitted successfully.');
-    
-    // Create a new review object
-    const newReview = {
-        name: 'You', // In a real app, this would be the logged-in user's name
-        avatar: '/images/default-avatar.jpg',
-        rating: parseFloat(rating),
-        date: new Date().toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        }),
-        title: title,
-        content: content,
-        helpful: 0,
-        photos: []
-    };
-    
-    // Add the new review to the page
-    const reviewsList = document.getElementById('reviews-list');
-    
-    if (reviewsList) {
-        // Add the new review at the top
-        const newReviewHTML = generateReviewsHTML([newReview], 1);
-        reviewsList.insertAdjacentHTML('afterbegin', newReviewHTML);
-        
-        // Update review count and average rating
-        // In a real app, you would recalculate this properly
-        const reviewCount = document.querySelector('.review-count');
-        if (reviewCount) {
-            const currentCount = parseInt(reviewCount.textContent.match(/\d+/)[0]);
-            reviewCount.textContent = reviewCount.textContent.replace(
-                `(${currentCount} reviews)`, 
-                `(${currentCount + 1} reviews)`
-            );
-        }
+
+    // Get hotel ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const hotelId = urlParams.get('id');
+
+    if (!hotelId) {
+        alert('Hotel ID not found.');
+        return;
     }
-    
-    // Reset the form
-    document.getElementById('review-form').reset();
-    ratingStars.setAttribute('data-selected', '0');
-    highlightStars(ratingStars.querySelectorAll('i'), 0);
-    document.getElementById('photo-preview').innerHTML = '';
-    
-    // Hide the form
-    toggleReviewForm(false);
+
+    try {
+        // Submit review to API
+        const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}/reviews`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${AuthToken.get()}`
+            },
+            body: JSON.stringify({
+                userRating: parseInt(rating),
+                comment: content
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || `HTTP error! status: ${response.status}`);
+        }
+
+        alert('Thank you for your review! It has been submitted successfully.');
+
+        // Reset the form
+        document.getElementById('review-form').reset();
+        ratingStars.setAttribute('data-selected', '0');
+        highlightStars(ratingStars.querySelectorAll('i'), 0);
+        document.getElementById('photo-preview').innerHTML = '';
+
+        // Hide the form
+        toggleReviewForm(false);
+
+        // Optionally refresh the page to show the new review
+        // window.location.reload();
+
+    } catch (error) {
+        console.error('Review submission error:', error);
+        alert('Failed to submit review. Please try again later.');
+    }
 }
 
 async function loadMoreReviews() {
