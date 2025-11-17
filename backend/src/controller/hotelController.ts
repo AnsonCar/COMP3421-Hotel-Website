@@ -1,6 +1,6 @@
 import { db } from '../db/index.js';
 import { hotels, reviews } from '../db/schema.js';
-import { eq, gte, lte, like, desc, asc, sql } from 'drizzle-orm';
+import { eq, gte, lte, like, desc, asc, sql, and } from 'drizzle-orm';
 
 // Get hotels list with filtering and sorting
 export const getHotels = async (c: any) => {
@@ -13,20 +13,32 @@ export const getHotels = async (c: any) => {
       sortBy = 'name_asc'
     } = c.req.query();
 
-    let query = db.select().from(hotels);
+    let query: any = db.select().from(hotels);
 
-    // Apply filters
+    // Build conditions
+    const conditions = [];
     if (starRating) {
-      query = query.where(eq(hotels.starRating, parseInt(starRating)));
+      conditions.push(eq(hotels.starRating, parseInt(starRating)));
     }
     if (minPrice) {
-      query = query.where(gte(hotels.pricePerNight, minPrice));
+      const min = parseFloat(minPrice);
+      if (!isNaN(min)) {
+        conditions.push(sql`${hotels.pricePerNight} >= ${min}`);
+      }
     }
     if (maxPrice) {
-      query = query.where(lte(hotels.pricePerNight, maxPrice));
+      const max = parseFloat(maxPrice);
+      if (!isNaN(max)) {
+        conditions.push(sql`${hotels.pricePerNight} <= ${max}`);
+      }
     }
     if (address) {
-      query = query.where(like(hotels.address, `%${address}%`));
+      conditions.push(like(hotels.address, `%${address}%`));
+    }
+
+    // Apply filters
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions));
     }
 
     // Apply sorting
@@ -111,7 +123,7 @@ export const getHotelDetails = async (c: any) => {
     // Calculate average rating from reviews
     const avgRating = hotelReviews.length > 0
       ? hotelReviews.reduce((sum, review) => sum + (review.userRating || 0), 0) / hotelReviews.length
-      : hotel.userRating;
+      : (hotel.userRating || 0);
 
     return c.json({
       hotel: {
