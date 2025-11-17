@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "dev": "cypress open",
+    "cy:open": "cypress open",
+    "type": "npx tsc --noEmit"
+  },
+  "devDependencies": {
+    "cypress": "^15.4.0",
+    "typescript": "^5.9.3"
+  }
+}
