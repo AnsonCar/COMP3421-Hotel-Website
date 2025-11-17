@@ -1,0 +1,58 @@
+{
+  "users": {
+    "validUser": {
+      "username": "testuser",
+      "email": "test@example.com",
+      "password": "testpass123",
+      "firstName": "Test",
+      "lastName": "User",
+      "phone": "+1234567890"
+    },
+    "newUser": {
+      "username": "newtestuser",
+      "email": "newtest@example.com",
+      "password": "newpass123",
+      "firstName": "New",
+      "lastName": "Test",
+      "phone": "+1987654321"
+    }
+  },
+  "hotels": {
+    "testHotel": {
+      "id": 1,
+      "name": "Test Luxury Hotel",
+      "location": "New York, NY",
+      "rating": 4.5,
+      "price": 299,
+      "description": "A luxurious hotel in the heart of New York",
+      "amenities": ["WiFi", "Pool", "Gym", "Spa"],
+      "images": ["/images/hotel1.jpg", "/images/hotel2.jpg"]
+    }
+  },
+  "bookings": {
+    "testBooking": {
+      "hotelId": 1,
+      "checkIn": "2025-12-01",
+      "checkOut": "2025-12-03",
+      "guests": 2,
+      "roomType": "Deluxe Suite"
+    }
+  },
+  "reviews": {
+    "testReview": {
+      "hotelId": 1,
+      "title": "Excellent Stay",
+      "content": "This hotel exceeded all our expectations. The service was impeccable and the rooms were luxurious.",
+      "rating": 5
+    }
+  },
+  "contact": {
+    "testMessage": {
+      "name": "Test User",
+      "email": "test@example.com",
+      "phone": "+1234567890",
+      "subject": "Reservation",
+      "message": "I would like to make a reservation for next week."
+    }
+  }
+}

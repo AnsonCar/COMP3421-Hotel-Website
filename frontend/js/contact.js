@@ -1,3 +1,6 @@
+// API Configuration - ensure this is defined before any API calls
+const API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000';
+
 // Contact form handling
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contact-form');

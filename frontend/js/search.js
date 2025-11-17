@@ -1,3 +1,6 @@
+// API Configuration - ensure this is defined before any API calls
+const API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Add search-page class to body for specific styling
     document.body.classList.add('search-page');

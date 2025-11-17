@@ -1,3 +1,6 @@
+// API Base URL for backend calls
+const API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Settings navigation
     const settingsNavItems = document.querySelectorAll('.settings-nav li');

@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "cypress open",
+    "test": "cypress run",
     "cy:open": "cypress open",
     "type": "npx tsc --noEmit"
   },
