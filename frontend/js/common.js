@@ -217,4 +217,233 @@ if (searchInput && searchBtn) {
         }
     }
 }
+
+// API Configuration
+const API_BASE_URL = 'http://localhost:3000';
+
+// JWT Token Management
+const AuthToken = {
+    set(token) {
+        localStorage.setItem('authToken', token);
+    },
+
+    get() {
+        return localStorage.getItem('authToken');
+    },
+
+    remove() {
+        localStorage.removeItem('authToken');
+    },
+
+    isValid() {
+        const token = this.get();
+        if (!token) return false;
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const currentTime = Date.now() / 1000;
+            return payload.exp > currentTime;
+        } catch (error) {
+            return false;
+        }
+    },
+
+    getUserFromToken() {
+        const token = this.get();
+        if (!token) return null;
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return {
+                userId: payload.sub,
+                email: payload.email,
+                firstName: payload.firstName,
+                lastName: payload.lastName
+            };
+        } catch (error) {
+            return null;
+        }
+    }
+};
+
+// Generic API Call Function
+async function apiCall(endpoint, options = {}) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            ...options.headers
+        },
+        ...options
+    };
+
+    // Add authorization header if token exists
+    const token = AuthToken.get();
+    if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    try {
+        const response = await fetch(url, config);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || `HTTP error! status: ${response.status}`);
+        }
+
+        return data;
+    } catch (error) {
+        console.error('API call error:', error);
+        throw error;
+    }
+}
+
+// Authentication API Functions
+const AuthAPI = {
+    async register(userData) {
+        try {
+            const response = await apiCall('/auth/register', {
+                method: 'POST',
+                body: JSON.stringify(userData)
+            });
+            return response;
+        } catch (error) {
+            throw new Error(`Registration failed: ${error.message}`);
+        }
+    },
+
+    async login(credentials) {
+        try {
+            const response = await apiCall('/auth/login', {
+                method: 'POST',
+                body: JSON.stringify(credentials)
+            });
+
+            if (response.token) {
+                AuthToken.set(response.token);
+            }
+
+            return response;
+        } catch (error) {
+            throw new Error(`Login failed: ${error.message}`);
+        }
+    },
+
+    async getUserProfile() {
+        try {
+            const response = await apiCall('/auth/profile');
+            return response.user;
+        } catch (error) {
+            throw new Error(`Failed to get user profile: ${error.message}`);
+        }
+    },
+
+    async updateUserProfile(userData) {
+        try {
+            const response = await apiCall('/auth/profile', {
+                method: 'PUT',
+                body: JSON.stringify(userData)
+            });
+            return response;
+        } catch (error) {
+            throw new Error(`Failed to update user profile: ${error.message}`);
+        }
+    },
+
+    async updatePassword(passwordData) {
+        try {
+            const response = await apiCall('/auth/password', {
+                method: 'PUT',
+                body: JSON.stringify(passwordData)
+            });
+            return response;
+        } catch (error) {
+            throw new Error(`Failed to update password: ${error.message}`);
+        }
+    },
+
+    async deleteAccount() {
+        try {
+            const response = await apiCall('/auth/account', {
+                method: 'DELETE'
+            });
+
+            // Clear token after successful deletion
+            AuthToken.remove();
+
+            return response;
+        } catch (error) {
+            throw new Error(`Failed to delete account: ${error.message}`);
+        }
+    },
+
+    logout() {
+        AuthToken.remove();
+    },
+
+    isLoggedIn() {
+        return AuthToken.isValid();
+    },
+
+    getCurrentUser() {
+        return AuthToken.getUserFromToken();
+    }
+};
+
+// Update existing form handlers to use API functions
+if (loginModal && openLoginBtn && closeModal) {
+    // ... existing modal code ...
+
+    // Update login form handler
+    const loginFormElement = document.getElementById('loginForm');
+    if (loginFormElement) {
+        loginFormElement.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('username').value; // Note: using 'username' field for email
+            const password = document.getElementById('password').value;
+
+            try {
+                const result = await AuthAPI.login({ email, password });
+                alert('Login successful!');
+                loginModal.classList.remove('active');
+                document.body.style.overflow = '';
+                // Optionally redirect or update UI
+                window.location.reload(); // Reload to update authenticated state
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+    }
+
+    // Update signup form handler
+    const signupFormElement = document.getElementById('signupForm');
+    if (signupFormElement) {
+        signupFormElement.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const firstName = document.getElementById('fullname').value.split(' ')[0] || '';
+            const lastName = document.getElementById('fullname').value.split(' ').slice(1).join(' ') || '';
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            try {
+                const result = await AuthAPI.register({ firstName, lastName, email, password });
+                alert('Registration successful! You can now log in.');
+                switchToTab('login');
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+    }
+
+    // ... existing forgot password handler ...
+}
+
 });

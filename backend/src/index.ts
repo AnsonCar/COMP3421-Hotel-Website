@@ -7,6 +7,19 @@ import contactRouter from './view/contact.js'
 import { Hono } from 'hono'
 const app = new Hono()
 
+// CORS middleware
+app.use('*', async (c, next) => {
+  c.header('Access-Control-Allow-Origin', '*')
+  c.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  c.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+
+  if (c.req.method === 'OPTIONS') {
+    return c.text('', 200)
+  }
+
+  await next()
+})
+
 // Public routes
 app.get('/', (c) => {
   return c.text('Hello Hono!')

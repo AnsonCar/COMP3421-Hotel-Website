@@ -135,67 +135,100 @@ function getHotelImage(starRating) {
 }
 // Function to load featured luxury hotels for the home page carousel
 async function loadFeaturedLuxuryHotels() {
+    const featuredContainer = document.querySelector('.exclusive-content-show');
+    if (!featuredContainer) return;
+
+    // Show loading state
+    showLoadingState(featuredContainer);
+
     try {
-        const response = await fetch('/data/star_ny_hotel.csv');
-        
+        const response = await fetch('http://localhost:3000/api/hotels/featured');
+
         if (!response.ok) {
-            throw new Error(`Failed to load hotel data: ${response.status} ${response.statusText}`);
+            throw new Error(`Failed to load featured hotels: ${response.status} ${response.statusText}`);
         }
-        
-        const csvData = await response.text();
-        const hotels = parseCSV(csvData);
-        
-        // Display featured luxury hotels in the carousel if it exists
-        const featuredContainer = document.querySelector('.exclusive-content-show');
-        if (featuredContainer) {
-            displayFeaturedHotels(hotels, featuredContainer);
+
+        const data = await response.json();
+        const hotels = data.hotels || [];
+
+        if (hotels.length === 0) {
+            throw new Error('No featured hotels available');
         }
+
+        // Display featured hotels in the carousel
+        displayFeaturedHotels(hotels, featuredContainer);
     } catch (error) {
-        console.error('Error loading CSV:', error);
-        // Fallback to use placeholder hotels if CSV loading fails
-        usePlaceholderHotels();
+        console.error('Error loading featured hotels:', error);
+        // Show error state
+        showErrorState(featuredContainer, error.message);
     }
+}
+
+// Show loading state
+function showLoadingState(container) {
+    container.innerHTML = `
+        <div class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>載入精選酒店中...</p>
+        </div>
+    `;
+}
+
+// Show error state
+function showErrorState(container, errorMessage) {
+    container.innerHTML = `
+        <div class="error-state">
+            <p>❌ 載入失敗：${errorMessage}</p>
+            <button onclick="loadFeaturedLuxuryHotels()">重試</button>
+        </div>
+    `;
 }
 
 // Display featured hotels in the carousel
 function displayFeaturedHotels(hotels, container) {
     // Sort hotels by star rating (highest first) and limit to 6
     const featuredHotels = hotels
-        .sort((a, b) => b.star_rating - a.star_rating)
+        .sort((a, b) => (b.starRating || 0) - (a.starRating || 0))
         .slice(0, 6);
-    
+
     // Clear current content
     container.innerHTML = '';
-    
+
     // Add each hotel to carousel
     featuredHotels.forEach(hotel => {
-        // Calculate average rate
-        const highRate = parseFloat(hotel.high_rate) || 0;
-        const lowRate = parseFloat(hotel.low_rate) || 0;
-        const averageRate = ((highRate + lowRate) / 2).toFixed(2);
-        
         // Generate star display
-        const fullStars = Math.floor(hotel.star_rating);
-        const halfStar = hotel.star_rating % 1 >= 0.5;
+        const starRating = hotel.starRating || 0;
+        const fullStars = Math.floor(starRating);
+        const halfStar = starRating % 1 >= 0.5;
         const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-        
-        const starsHTML = '★'.repeat(fullStars) + 
-                          (halfStar ? '⯨' : '') + 
+
+        const starsHTML = '★'.repeat(fullStars) +
+                          (halfStar ? '⯨' : '') +
                           '☆'.repeat(emptyStars);
-        
+
+        // Get hotel image (use default if not available)
+        const imageUrl = getHotelImage(starRating);
+
         // Create hotel element
         const hotelElement = document.createElement('div');
         hotelElement.className = 'hotel';
         hotelElement.innerHTML = `
-            <a href="hotel-details.html?id=${hotel.ean_hotel_id || ''}">
-                <img src="${hotel.image}" alt="${hotel.name}">
+            <a href="hotel-details.html?id=${hotel.hotelId || ''}">
+                <img src="${imageUrl}" alt="${hotel.name}">
                 <h3>${hotel.name}</h3>
+                <div class="hotel-rating">
+                    <span class="stars">${starsHTML}</span>
+                    <span class="rating">${hotel.userRating || 'N/A'}</span>
+                </div>
+                <div class="hotel-price">
+                    $${hotel.pricePerNight || 'N/A'} / 晚
+                </div>
             </a>
         `;
-        
+
         container.appendChild(hotelElement);
     });
-    
+
     // After adding all hotels, reinitialize the carousel
     reinitializeCarousel();
 }
