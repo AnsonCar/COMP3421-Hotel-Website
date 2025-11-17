@@ -53,3 +53,13 @@ export const bookings = pgTable('bookings', {
   check('guests_check', sql`${table.guests} > 0`),
   check('check_out_date_check', sql`${table.checkOutDate} > ${table.checkInDate}`),
 ]);
+
+// Contacts table
+export const contacts = pgTable('contacts', {
+  contactId: serial('contact_id').primaryKey(),
+  name: varchar('name', { length: 100 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull(),
+  subject: varchar('subject', { length: 255 }).notNull(),
+  message: text('message').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+});
