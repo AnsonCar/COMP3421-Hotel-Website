@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (removePhotoBtn) {
         removePhotoBtn.addEventListener('click', function() {
-            photoPreview.src = 'images/default-profile.jpg';
+            photoPreview.src = '/images/default-profile.jpg';
             selectedFile = null;
             if (uploadInput) uploadInput.value = '';
         });

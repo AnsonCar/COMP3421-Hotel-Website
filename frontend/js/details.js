@@ -473,7 +473,7 @@ function getRandomReviews(baseRating) {
         const avatarNumber = Math.floor(Math.random() * 15) + 1;
         const avatarUrl = avatarImagePool.length
             ? avatarImagePool[Math.floor(Math.random() * avatarImagePool.length)]
-            : '/images/default-avatar.jpg';
+            : '/images/default-profile.jpg';
         
         // Add review to array
         reviews.push({
@@ -790,7 +790,7 @@ function generateRoomOptionsHTML(rooms) {
         }).join('');
         
         // Use placeholder image if room image is not provided
-        const roomImage = room.image || '/images/room-placeholder.jpg';
+        const roomImage = room.image || '/images/sample.jpg';
         
         return `
             <div class="room-card">
@@ -1198,9 +1198,10 @@ function openGalleryModal() {
             
             // Add 12 demo gallery images
             const demoImages = [];
+            const availableImages = ['sample.jpg', 'room-1.jpg', 'room-2.jpg', 'room-3.jpg', 'room-4.jpg'];
             for (let i = 1; i <= 12; i++) {
-                const imageNum = (i % 5) + 1; // Cycle through 5 images
-                demoImages.push(`/images/hotel-gallery-${imageNum}.jpg`);
+                const imageIndex = (i - 1) % availableImages.length; // Cycle through available images
+                demoImages.push(`/images/${availableImages[imageIndex]}`);
             }
             
             // Set the first image as featured

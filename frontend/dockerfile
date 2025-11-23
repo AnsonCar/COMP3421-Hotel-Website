@@ -1,6 +1,4 @@
 FROM nginx:1.23.1-alpine
-WORKDIR /app
-COPY . .
 
 WORKDIR /www
 

@@ -111,22 +111,9 @@ function processHotelData(hotels) {
 
 // Function to get a luxury hotel image based on star rating
 function getHotelImage(starRating) {
-    if (starRating == 5) {
-        // Ultra luxury hotels (5-star)
-        const ultraLuxuryImages = [
-            "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-        ];
-        return ultraLuxuryImages[Math.floor(Math.random() * ultraLuxuryImages.length)];
-    } else {
-        // Luxury hotels (4.5-star)
-        const luxuryImages = [
-            "https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-            "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-        ];
-        return luxuryImages[Math.floor(Math.random() * luxuryImages.length)];
-    }
+    // Use local images for better local development support
+    const availableImages = ['sample.jpg', 'room-1.jpg', 'room-2.jpg', 'room-3.jpg', 'room-4.jpg'];
+    return `/images/${availableImages[Math.floor(Math.random() * availableImages.length)]}`;
 }
 
 // Function to search luxury hotels
@@ -402,7 +389,7 @@ function createHotelCard(hotel) {
     });
     
     // Create hotel image URL or use a placeholder
-    const imageUrl = hotel.image_url || `https://placehold.co/600x400?text=${encodeURIComponent(hotel.name)}`;
+    const imageUrl = hotel.image_url || `/images/sample.jpg`;
     
     // Create the card content
     card.innerHTML = `
@@ -547,12 +534,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Default image function
 function getDefaultHotelImage(hotel) {
-    // Create a color based on star rating for variety
-    const colorHue = ((parseInt(hotel.ean_hotel_id) % 360) + 180) % 360;
-    const starRating = parseFloat(hotel.star_rating) || 3;
-    const brightness = Math.min(50 + (starRating * 10), 90); // Higher star rating = brighter
-    
-    return `https://placehold.co/600x400/hsl(${colorHue},70%,${brightness}%)/333333?text=${encodeURIComponent(hotel.name)}`;
+    // Use local sample image for local development
+    return `/images/sample.jpg`;
 }
   // Create and add the filter and sort UI to the search results page
   const resultsContainer = document.getElementById('search-results');
