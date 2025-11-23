@@ -44,13 +44,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     throw new Error(data.error || `HTTP error! status: ${response.status}`);
                 }
 
-                // Success - show success message
+                // Success - show success message and reset form immediately
                 contactForm.style.display = 'none';
                 successMessage.classList.add('active');
+                contactForm.reset();
 
-                // Reset form after a delay
+                // Hide success message and show form after a delay
                 setTimeout(() => {
-                    contactForm.reset();
                     successMessage.classList.remove('active');
                     contactForm.style.display = 'block';
                 }, 5000);

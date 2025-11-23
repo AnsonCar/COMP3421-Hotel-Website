@@ -1,28 +1,72 @@
 // API Base URL for backend calls
 const API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000';
 
+// JWT Token Management
+const AuthToken = {
+    set(token) {
+        localStorage.setItem('authToken', token);
+    },
+
+    get() {
+        return localStorage.getItem('authToken');
+    },
+
+    remove() {
+        localStorage.removeItem('authToken');
+    },
+
+    isValid() {
+        const token = this.get();
+        if (!token) return false;
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const currentTime = Date.now() / 1000;
+            return payload.exp > currentTime;
+        } catch (error) {
+            return false;
+        }
+    },
+
+    getUserFromToken() {
+        const token = this.get();
+        if (!token) return null;
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return {
+                userId: payload.sub,
+                email: payload.email,
+                firstName: payload.firstName,
+                lastName: payload.lastName
+            };
+        } catch (error) {
+            return null;
+        }
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     // Settings navigation
     const settingsNavItems = document.querySelectorAll('.settings-nav li');
     const settingsSections = document.querySelectorAll('.settings-section');
-    
+
     settingsNavItems.forEach(item => {
         item.addEventListener('click', function() {
             const targetSection = this.getAttribute('data-section');
-            
+
+            // Remove active class from all nav items
             settingsNavItems.forEach(navItem => navItem.classList.remove('active'));
-            this.addEventListener('click', function() {
-                const targetSection = this.getAttribute('data-section');
-                
-                settingsNavItems.forEach(navItem => navItem.classList.remove('active'));
-                this.classList.add('active');
-                
-                settingsSections.forEach(section => {
-                    section.classList.remove('active');
-                    if (section.id === `${targetSection}-section`) {
-                        section.classList.add('active');
-                    }
-                });
+
+            // Add active class to clicked item
+            this.classList.add('active');
+
+            // Hide all sections and show target section
+            settingsSections.forEach(section => {
+                section.classList.remove('active');
+                if (section.id === `${targetSection}-section`) {
+                    section.classList.add('active');
+                }
             });
         });
     });

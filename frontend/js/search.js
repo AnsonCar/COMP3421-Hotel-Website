@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Load hotel data and perform search
-    loadHotelData()
+    loadHotelData(searchQuery)
         .then(apiHotels => {
             const hotelDatabase = processHotelData(apiHotels);
             // Perform the search
@@ -52,17 +52,29 @@ document.addEventListener('DOMContentLoaded', function() {
         if (query) {
             // Store search query in sessionStorage
             sessionStorage.setItem('searchQuery', query);
-            // Perform the search with the new query
-            const results = searchHotels(query, hotelDatabase);
-            displaySearchResultsWithPagination(results, query);
+            // Reload data with new query
+            loadHotelData(query)
+                .then(apiHotels => {
+                    const updatedHotelDatabase = processHotelData(apiHotels);
+                    const results = searchHotels(query, updatedHotelDatabase);
+                    displaySearchResultsWithPagination(results, query);
+                })
+                .catch(error => {
+                    console.error('Error performing search:', error);
+                    displayError();
+                });
         }
     }
 });
 
 // Function to load hotel data from API
-async function loadHotelData() {
+async function loadHotelData(query = '') {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/hotels`);
+        const url = query
+            ? `${API_BASE_URL}/api/hotels?query=${encodeURIComponent(query)}`
+            : `${API_BASE_URL}/api/hotels`;
+
+        const response = await fetch(url);
 
         if (!response.ok) {
             throw new Error(`Failed to load hotel data: ${response.status} ${response.statusText}`);
@@ -396,7 +408,7 @@ function createHotelCard(hotel) {
     card.innerHTML = `
         <div class="hotel-image">
             <img src="${imageUrl}" alt="${hotel.name}">
-           
+
         </div>
         <div class="hotel-info">
             <h3 class="hotel-name">${hotel.name}</h3>
@@ -406,6 +418,7 @@ function createHotelCard(hotel) {
             <div class="hotel-amenities">
                 ${getDefaultAmenities(hotel.star_rating)}
             </div>
+            <button class="book-btn" onclick="window.location.href='hotel-details.html?id=${hotel.ean_hotel_id}'">Book Now</button>
         </div>
         <div class="click-indicator">
             <i class="fas fa-arrow-right"></i>
