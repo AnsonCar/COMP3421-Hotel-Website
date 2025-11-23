@@ -1,5 +1,4 @@
-// API Base URL for backend calls
-const API_BASE_URL = 'http://localhost:3000';
+// API Configuration is defined in common.js
 
 // JWT Token Management
 const AuthToken = {

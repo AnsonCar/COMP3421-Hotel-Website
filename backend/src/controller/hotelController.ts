@@ -33,7 +33,8 @@ export const getHotels = async (c: any) => {
       }
     }
     if (address) {
-      conditions.push(like(hotels.address, `%${address}%`));
+      // Search in both name and address for better user experience
+      conditions.push(sql`(${hotels.name} ILIKE ${`%${address}%`} OR ${hotels.address} ILIKE ${`%${address}%`})`);
     }
 
     // Apply filters

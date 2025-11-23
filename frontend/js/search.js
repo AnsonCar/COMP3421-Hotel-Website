@@ -1,5 +1,4 @@
-// API Configuration - ensure this is defined before any API calls
-const API_BASE_URL = 'http://localhost:3000';
+// API Configuration is defined in common.js
 
 document.addEventListener('DOMContentLoaded', function() {
     // Add search-page class to body for specific styling
@@ -71,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadHotelData(query = '') {
     try {
         const url = query
-            ? `${API_BASE_URL}/api/hotels?query=${encodeURIComponent(query)}`
+            ? `${API_BASE_URL}/api/hotels?address=${encodeURIComponent(query)}`
             : `${API_BASE_URL}/api/hotels`;
 
         const response = await fetch(url);
