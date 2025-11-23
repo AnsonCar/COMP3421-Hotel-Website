@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "NodeNext",
+    "module": "Node16",
+    "moduleResolution": "node16",
     "strict": true,
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "skipLibCheck": true,
     "types": [
       "node"

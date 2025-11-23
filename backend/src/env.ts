@@ -1,10 +1,7 @@
 import { config } from "dotenv";
-import { existsSync } from "fs";
-import { resolve } from "path";
 
 // Determine which env file to use
-const isLocal =
-  process.env.NODE_ENV !== "production" && existsSync(resolve(".env.local"));
+const isLocal = process.env.NODE_ENV !== "production";
 const envPath = isLocal ? "envs/.env.local" : "envs/.env";
 
 // Load the appropriate env file
