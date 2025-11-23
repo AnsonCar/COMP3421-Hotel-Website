@@ -1,3 +1,6 @@
+// API Configuration
+const API_BASE_URL = window.API_BASE_URL || 'http://localhost:3000';
+
 document.addEventListener('DOMContentLoaded', function() {
 // Auth Modal Functionality
 const loginModal = document.getElementById('loginModal');
@@ -241,9 +244,6 @@ if (searchInput && searchBtn) {
         }
     }
 }
-
-// API Configuration
-const API_BASE_URL = 'http://localhost:3000';
 
 // JWT Token Management
 const AuthToken = {
