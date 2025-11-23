@@ -6,6 +6,8 @@ services:
     container_name: ${PROJECT_NAME}-frontend
     ports:
       - 80:80
+    depends_on:
+      - backend
 
   backend:
     build:
