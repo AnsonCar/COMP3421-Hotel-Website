@@ -3,7 +3,7 @@
    * BASE
    */
   "files.encoding": "utf8",
-  "editor.formatOnSave": true,
+  // "editor.formatOnSave": true,
   "editor.linkedEditing": true, // 使得同時編輯相同變數或符號更容易。
   "editor.bracketPairColorization.enabled": true, // 啟用括號配對著色功能。
   "editor.guides.bracketPairs": true, // 在括號間顯示視覺導引線
