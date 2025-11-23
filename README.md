@@ -30,13 +30,14 @@ Online booking platforms are growing rapidly. Tourists prefer them for convenien
 | Travelers / Customers    | High-spending individuals seeking premium services |
 | Hotel Partners (4★+ NYC) | Businesses listing properties on the platform      |
 
+
 ## Client-Side Components
 
 ### 1. Website Architecture
 
 - **Frontend Layer**: HTML, CSS, JavaScript – handles UI, search, booking, account management
 - **Backend Layer**: Node.js – processes logic, bridges frontend and database
-- **Database Layer**: MySQL – stores hotels, users, bookings, reviews
+- **Database Layer**: PostgreSQL – stores hotels, users, bookings, reviews
 
 ### 2. Website Pages
 
@@ -76,3 +77,48 @@ Tables:
 | Configuration | DB connection setup            | db.js                | MySQL connection & credentials      |
 
 _Note: Original document contains figures (architecture diagram, page hierarchy tree, ER diagram) which cannot be reproduced here._
+
+---
+
+## Development Setup
+
+### Running the Application
+
+#### Backend
+```bash
+cd backend
+npm run dev  # Development mode
+```
+
+#### Frontend (Development Server)
+For local development, use the Python HTTP server on port 8080:
+```bash
+cd frontend
+./start-dev.sh
+# Or directly: python3 -m http.server 8080
+```
+
+#### Production (Docker)
+```bash
+docker compose up -d --build --force-recreate
+```
+
+## init test data
+
+```bash
+cd backend
+```
+
+```bash
+npm run db:testdata
+```
+
+## test frontend
+
+```bash
+cd cypress
+```
+
+```bash
+npm run test
+```

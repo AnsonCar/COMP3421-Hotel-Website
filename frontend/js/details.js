@@ -1,6 +1,4 @@
-// API Configuration - ensure this is defined before any API calls
-const API_BASE_URL = 'http://localhost:3000';
-
+// Load hotel details
 document.addEventListener('DOMContentLoaded', function() {
     // Get hotel ID from URL
     const urlParams = new URLSearchParams(window.location.search);

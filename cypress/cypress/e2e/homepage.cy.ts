@@ -95,7 +95,7 @@ describe('Homepage', () => {
   describe('API Integration', () => {
     it('should make API call to load featured hotels', () => {
       // Intercept API call
-      cy.intercept('GET', '**/api/hotels/featured').as('getFeaturedHotels');
+      cy.intercept('GET', 'http://localhost:3000/api/hotels/featured').as('getFeaturedHotels');
 
       cy.reload();
 
@@ -107,7 +107,7 @@ describe('Homepage', () => {
 
     it('should handle API errors gracefully', () => {
       // Mock API error
-      cy.intercept('GET', '**/api/hotels/featured', { statusCode: 500 }).as('getFeaturedHotelsError');
+      cy.intercept('GET', 'http://localhost:3000/api/hotels/featured', { statusCode: 500 }).as('getFeaturedHotelsError');
 
       cy.reload();
 

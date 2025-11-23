@@ -10,7 +10,7 @@ describe('Hotel Details Page', () => {
     });
 
     it('should load hotel details from API', () => {
-      cy.intercept('GET', '**/api/hotels/1').as('getHotelDetails');
+      cy.intercept('GET', 'http://localhost:3000/api/hotels/1').as('getHotelDetails');
 
       cy.visit('/hotel-details.html?id=1');
 
@@ -57,7 +57,7 @@ describe('Hotel Details Page', () => {
 
   describe('Reviews Section', () => {
     it('should load and display reviews', () => {
-      cy.intercept('GET', '**/api/hotels/1/reviews').as('getHotelReviews');
+      cy.intercept('GET', 'http://localhost:3000/api/hotels/1/reviews').as('getHotelReviews');
 
       cy.visit('/hotel-details.html?id=1');
 
@@ -112,7 +112,7 @@ describe('Hotel Details Page', () => {
     });
 
     it('should submit review successfully', () => {
-      cy.intercept('POST', '**/api/hotels/1/reviews').as('submitReview');
+      cy.intercept('POST', 'http://localhost:3000/api/hotels/1/reviews').as('submitReview');
 
       // Fill out review form
       cy.get('#review-title').type('Great stay!');
@@ -129,7 +129,7 @@ describe('Hotel Details Page', () => {
     });
 
     it('should handle review submission errors', () => {
-      cy.intercept('POST', '**/api/hotels/1/reviews', { statusCode: 400 }).as('submitReviewError');
+      cy.intercept('POST', 'http://localhost:3000/api/hotels/1/reviews', { statusCode: 400 }).as('submitReviewError');
 
       cy.get('#review-title').type('Test review');
       cy.get('#review-content').type('Test content');
@@ -177,7 +177,7 @@ describe('Hotel Details Page', () => {
     });
 
     it('should submit booking successfully', () => {
-      cy.intercept('POST', '**/api/bookings').as('submitBooking');
+      cy.intercept('POST', 'http://localhost:3000/api/bookings').as('submitBooking');
 
       // Mock logged in user
       cy.window().then((win) => {
@@ -227,7 +227,7 @@ describe('Hotel Details Page', () => {
     });
 
     it('should handle API errors gracefully', () => {
-      cy.intercept('GET', '**/api/hotels/1', { statusCode: 404 }).as('hotelNotFound');
+      cy.intercept('GET', 'http://localhost:3000/api/hotels/1', { statusCode: 404 }).as('hotelNotFound');
 
       cy.visit('/hotel-details.html?id=1');
 

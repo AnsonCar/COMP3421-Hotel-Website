@@ -50,7 +50,7 @@ describe('Settings Page', () => {
     });
 
     it('should update profile successfully', () => {
-      cy.intercept('PUT', '**/auth/profile').as('updateProfile');
+      cy.intercept('PUT', 'http://localhost:3000/auth/profile').as('updateProfile');
 
       cy.get('#profile-first-name').clear().type('Updated');
       cy.get('#profile-last-name').clear().type('User');
@@ -65,7 +65,7 @@ describe('Settings Page', () => {
     });
 
     it('should handle profile update errors', () => {
-      cy.intercept('PUT', '**/auth/profile', { statusCode: 400 }).as('updateProfileError');
+      cy.intercept('PUT', 'http://localhost:3000/auth/profile', { statusCode: 400 }).as('updateProfileError');
 
       cy.get('#profile-first-name').clear().type('Test');
       cy.get('#profile-form').submit();
@@ -109,7 +109,7 @@ describe('Settings Page', () => {
     });
 
     it('should change password successfully', () => {
-      cy.intercept('PUT', '**/auth/password').as('changePassword');
+      cy.intercept('PUT', 'http://localhost:3000/auth/password').as('changePassword');
 
       cy.get('#current-password').type('oldpassword');
       cy.get('#new-password').type('newpassword123');
@@ -211,7 +211,7 @@ describe('Settings Page', () => {
     });
 
     it('should delete account successfully', () => {
-      cy.intercept('DELETE', '**/auth/account').as('deleteAccount');
+      cy.intercept('DELETE', 'http://localhost:3000/auth/account').as('deleteAccount');
 
       cy.get('#delete-confirm').check();
       cy.get('#delete-password').type('password123');
@@ -225,7 +225,7 @@ describe('Settings Page', () => {
     });
 
     it('should handle deletion errors', () => {
-      cy.intercept('DELETE', '**/auth/account', { statusCode: 400 }).as('deleteAccountError');
+      cy.intercept('DELETE', 'http://localhost:3000/auth/account', { statusCode: 400 }).as('deleteAccountError');
 
       cy.get('#delete-confirm').check();
       cy.get('#delete-password').type('wrongpassword');
@@ -259,7 +259,7 @@ describe('Settings Page', () => {
 
   describe('API Integration', () => {
     it('should load user profile data on page load', () => {
-      cy.intercept('GET', '**/auth/profile').as('getProfile');
+      cy.intercept('GET', 'http://localhost:3000/auth/profile').as('getProfile');
 
       cy.reload();
 
@@ -269,7 +269,7 @@ describe('Settings Page', () => {
     });
 
     it('should handle API errors gracefully', () => {
-      cy.intercept('GET', '**/auth/profile', { statusCode: 401 }).as('getProfileError');
+      cy.intercept('GET', 'http://localhost:3000/auth/profile', { statusCode: 401 }).as('getProfileError');
 
       cy.reload();
 

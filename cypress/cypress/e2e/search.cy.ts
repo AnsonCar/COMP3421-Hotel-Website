@@ -39,7 +39,7 @@ describe('Search Functionality', () => {
 
   describe('API Integration', () => {
     it('should make API call when searching', () => {
-      cy.intercept('GET', '**/api/hotels*').as('searchHotels');
+      cy.intercept('GET', 'http://localhost:3000/api/hotels*').as('searchHotels');
 
       cy.get('#search-input').type('luxury{enter}');
 
@@ -50,13 +50,13 @@ describe('Search Functionality', () => {
     });
 
     it('should handle search parameters correctly', () => {
-      cy.intercept('GET', '**/api/hotels*').as('searchHotels');
+      cy.intercept('GET', 'http://localhost:3000/api/hotels*').as('searchHotels');
 
       cy.get('#search-input').type('5 star hotel{enter}');
 
       cy.wait('@searchHotels').then((interception) => {
         const url = new URL(interception.request.url);
-        expect(url.searchParams.has('query')).to.be.true;
+        expect(url.searchParams.has('address')).to.be.true;
       });
     });
 
@@ -74,7 +74,7 @@ describe('Search Functionality', () => {
 
     it('should handle empty search results', () => {
       // Mock empty results
-      cy.intercept('GET', '**/api/hotels*', { body: [] }).as('emptySearch');
+      cy.intercept('GET', 'http://localhost:3000/api/hotels*', { body: { hotels: [] } }).as('emptySearch');
 
       cy.get('#search-input').type('nonexistent hotel{enter}');
 
@@ -85,7 +85,7 @@ describe('Search Functionality', () => {
     });
 
     it('should handle API errors gracefully', () => {
-      cy.intercept('GET', '**/api/hotels*', { statusCode: 500 }).as('searchError');
+      cy.intercept('GET', 'http://localhost:3000/api/hotels*', { statusCode: 500 }).as('searchError');
 
       cy.get('#search-input').type('test{enter}');
 

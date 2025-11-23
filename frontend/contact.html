@@ -57,17 +57,17 @@
                 <form class="contact-form" id="contact-form">
                     <div class="form-group">
                         <label for="name">Your Name</label>
-                        <input type="text" id="name" name="name" required>
+                        <input type="text" id="name" name="name" autocomplete="name" required>
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" name="email" autocomplete="email" required>
                     </div>
 
                     <div class="form-group">
                         <label for="phone">Phone Number (Optional)</label>
-                        <input type="tel" id="phone" name="phone">
+                        <input type="tel" id="phone" name="phone" autocomplete="tel">
                     </div>
 
                     <div class="form-group">
@@ -173,12 +173,12 @@
                 <form id="loginForm">
                     <div class="input-group">
                         <label for="username">Username</label>
-                        <input type="text" id="username" required>
+                        <input type="text" id="username" autocomplete="username" required>
                     </div>
-                    
+
                     <div class="input-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" required>
+                        <input type="password" id="password" autocomplete="current-password" required>
                     </div>
                     
                     <div class="login-options">
@@ -213,27 +213,27 @@
                 <form id="signupForm">
                     <div class="input-group">
                         <label for="fullname">Full Name</label>
-                        <input type="text" id="fullname" required>
+                        <input type="text" id="fullname" autocomplete="name" required>
                     </div>
-                    
+
                     <div class="input-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" required>
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" autocomplete="email" required>
                     </div>
-                    
+
                     <div class="input-group">
                         <label for="new-username">Username</label>
-                        <input type="text" id="new-username" required>
+                        <input type="text" id="new-username" autocomplete="username" required>
                     </div>
-                    
+
                     <div class="input-group">
                         <label for="new-password">Password</label>
-                        <input type="password" id="new-password" required>
+                        <input type="password" id="new-password" autocomplete="new-password" required>
                     </div>
-                    
+
                     <div class="input-group">
                         <label for="confirm-password">Confirm Password</label>
-                        <input type="password" id="confirm-password" required>
+                        <input type="password" id="confirm-password" autocomplete="new-password" required>
                     </div>
                     
                     <div class="terms">
@@ -265,7 +265,7 @@
                 <form id="forgotPasswordForm">
                     <div class="input-group">
                         <label for="recovery-email">Email Address</label>
-                        <input type="email" id="recovery-email" required>
+                        <input type="email" id="recovery-email" autocomplete="email" required>
                     </div>
                     
                     <button type="submit" class="auth-btn">Send Reset Link</button>

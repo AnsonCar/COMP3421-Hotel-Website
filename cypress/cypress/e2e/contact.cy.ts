@@ -61,7 +61,7 @@ describe('Contact Form', () => {
 
   describe('Contact Form Submission', () => {
     it('should submit contact form successfully', () => {
-      cy.intercept('POST', '/api/contact', {
+      cy.intercept('POST', 'http://localhost:3000/api/contact', {
         statusCode: 201,
         body: { message: 'Contact message submitted successfully' }
       }).as('submitContact');
@@ -78,28 +78,31 @@ describe('Contact Form', () => {
     });
 
     it('should show success message after submission', () => {
-      cy.intercept('POST', '/api/contact', { statusCode: 201 }).as('submitContact');
+       cy.intercept('POST', 'http://localhost:3000/api/contact', {
+         statusCode: 201,
+         body: { message: 'Contact message submitted successfully' }
+       }).as('submitContact');
 
-      cy.get('#name').type('Test User');
-      cy.get('#email').type('test@example.com');
-      cy.get('#subject').select('Feedback');
-      cy.get('#message').type('Great service!');
+       cy.get('#name').type('Test User');
+       cy.get('#email').type('test@example.com');
+       cy.get('#subject').select('Feedback');
+       cy.get('#message').type('Great service!');
 
-      cy.get('#contact-form button[type="submit"]').click();
+       cy.get('#contact-form button[type="submit"]').click();
 
-      cy.wait('@submitContact');
+       cy.wait('@submitContact');
 
-      // Wait for JavaScript to process the response
-      cy.wait(500);
+       // Wait for JavaScript to process the response
+       cy.wait(500);
 
-      // Check if success message becomes visible (JavaScript should add 'active' class)
-      cy.get('#success-message').should('have.class', 'active');
-      cy.get('#success-message').should('be.visible');
-      cy.get('#success-message').should('contain', 'Message Sent Successfully');
-    });
+       // Check if success message becomes visible (JavaScript should add 'active' class)
+       cy.get('#success-message').should('have.class', 'active');
+       cy.get('#success-message').should('be.visible');
+       cy.get('#success-message').should('contain', 'Message Sent Successfully');
+     });
 
     it('should handle submission errors', () => {
-      cy.intercept('POST', '/api/contact', { statusCode: 400 }).as('submitContactError');
+      cy.intercept('POST', 'http://localhost:3000/api/contact', { statusCode: 400 }).as('submitContactError');
 
       cy.get('#name').type('Test User');
       cy.get('#email').type('test@example.com');
@@ -120,7 +123,10 @@ describe('Contact Form', () => {
     });
 
     it('should reset form after successful submission', () => {
-      cy.intercept('POST', '/api/contact', { statusCode: 201 }).as('submitContact');
+      cy.intercept('POST', 'http://localhost:3000/api/contact', {
+        statusCode: 201,
+        body: { message: 'Contact message submitted successfully' }
+      }).as('submitContact');
 
       cy.get('#name').type('Test User');
       cy.get('#email').type('test@example.com');
