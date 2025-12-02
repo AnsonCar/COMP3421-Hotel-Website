@@ -1,13 +1,32 @@
 services:
+  reverse-proxy:
+    # The official v3 Traefik docker image
+    image: traefik:v3.2
+    container_name: traefik-reverse-proxy
+    # Enables the web UI and tells Traefik to listen to docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8888:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/etc/traefik/traefik.yml
+    restart: always
+    labels:
+      - "traefik.enable=true"
   frontend:
     build:
       context: ./frontend
       dockerfile: ./dockerfile
     container_name: ${PROJECT_NAME}-frontend
-    ports:
-      - 80:80
+    # ports:
+    #   - 80:80
     depends_on:
       - backend
+    labels:
+      - "traefik.http.routers.${PROJECT_NAME}-frontend.rule=Host(`hostels.localhost`)"
 
   backend:
     build:
