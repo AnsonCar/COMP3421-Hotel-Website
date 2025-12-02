@@ -13,7 +13,8 @@ describe('Hotel Details Page', () => {
       cy.intercept('GET', 'http://localhost:3000/api/hotels/1').as('getHotelDetails');
 
       cy.visit('/hotel-details.html?id=1');
-
+      cy.wait(1000);
+    
       cy.wait('@getHotelDetails').then((interception) => {
         expect(interception.response.statusCode).to.equal(200);
       });
@@ -76,7 +77,8 @@ describe('Hotel Details Page', () => {
       });
 
       cy.reload();
-
+      cy.wait(1000);
+  
       cy.get('.write-review-form').should('be.visible');
     });
 
@@ -87,7 +89,8 @@ describe('Hotel Details Page', () => {
       });
 
       cy.reload();
-
+      cy.wait(1000);
+  
       cy.get('.write-review-form').should('not.exist');
     });
   });
@@ -100,29 +103,35 @@ describe('Hotel Details Page', () => {
       });
 
       cy.reload();
-
+      cy.wait(1000);
+  
       cy.get('.write-review-form', { timeout: 10000 }).should('be.visible');
     });
 
     it('should validate required fields', () => {
       cy.get('#review-form').find('button[type="submit"]').click();
-
+      cy.wait(1000);
+  
       // Should show validation errors
       cy.get('.write-review-form').should('be.visible');
     });
 
     it('should submit review successfully', () => {
       cy.intercept('POST', 'http://localhost:3000/api/hotels/1/reviews').as('submitReview');
-
+  
       // Fill out review form
       cy.get('#review-title').type('Great stay!');
+      cy.wait(1000);
       cy.get('#review-content').type('This hotel exceeded our expectations.');
-
+      cy.wait(1000);
+  
       // Select rating (5 stars)
       cy.get('.star-input .fa-star').last().click();
-
+      cy.wait(1000);
+  
       cy.get('#review-form').submit();
-
+      cy.wait(1000);
+  
       cy.wait('@submitReview').then((interception) => {
         expect(interception.response.statusCode).to.equal(201);
       });
@@ -130,15 +139,19 @@ describe('Hotel Details Page', () => {
 
     it('should handle review submission errors', () => {
       cy.intercept('POST', 'http://localhost:3000/api/hotels/1/reviews', { statusCode: 400 }).as('submitReviewError');
-
+  
       cy.get('#review-title').type('Test review');
+      cy.wait(1000);
       cy.get('#review-content').type('Test content');
+      cy.wait(1000);
       cy.get('.star-input .fa-star').first().click();
-
+      cy.wait(1000);
+  
       cy.get('#review-form').submit();
-
+      cy.wait(1000);
+  
       cy.wait('@submitReviewError');
-
+  
       // Should show error message
       cy.get('.write-review-form').should('be.visible');
     });
@@ -151,12 +164,14 @@ describe('Hotel Details Page', () => {
 
     it('should open booking modal when clicking book button', () => {
       cy.get('.book-now-btn').first().click();
+      cy.wait(1000);
       cy.get('#booking-modal').should('be.visible');
     });
 
     it('should display booking form correctly', () => {
       cy.get('.book-now-btn').first().click();
-
+      cy.wait(1000);
+  
       cy.get('#booking-modal').within(() => {
         cy.get('#check-in-date').should('be.visible');
         cy.get('#check-out-date').should('be.visible');
@@ -168,38 +183,45 @@ describe('Hotel Details Page', () => {
 
     it('should validate booking dates', () => {
       cy.get('.book-now-btn').first().click();
-
+      cy.wait(1000);
+  
       // Try to book without dates
       cy.get('#complete-booking').click();
-
+      cy.wait(1000);
+  
       // Should show validation or prevent submission
       cy.get('#booking-modal').should('be.visible');
     });
 
     it('should submit booking successfully', () => {
       cy.intercept('POST', 'http://localhost:3000/api/bookings').as('submitBooking');
-
+  
       // Mock logged in user
       cy.window().then((win) => {
         win.localStorage.setItem('token', 'mock-jwt-token');
       });
-
+  
       cy.reload();
+      cy.wait(1000);
       cy.get('#hotel-detail-container', { timeout: 10000 }).should('be.visible');
-
+  
       cy.get('.book-now-btn').first().click();
-
+      cy.wait(1000);
+  
       // Fill booking form
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
       const dayAfter = new Date();
       dayAfter.setDate(dayAfter.getDate() + 3);
-
+  
       cy.get('#check-in-date').type(tomorrow.toISOString().split('T')[0]);
+      cy.wait(1000);
       cy.get('#check-out-date').type(dayAfter.toISOString().split('T')[0]);
-
+      cy.wait(1000);
+  
       cy.get('#complete-booking').click();
-
+      cy.wait(1000);
+  
       cy.wait('@submitBooking').then((interception) => {
         expect(interception.response.statusCode).to.equal(201);
       });
@@ -209,11 +231,13 @@ describe('Hotel Details Page', () => {
   describe('Navigation', () => {
     it('should navigate back to home', () => {
       cy.get('#home').click();
+      cy.wait(1000);
       cy.url().should('include', 'index.html');
     });
 
     it('should open login modal', () => {
       cy.get('#openLoginBtn').click();
+      cy.wait(1000);
       cy.get('#loginModal').should('be.visible');
     });
   });
@@ -221,7 +245,8 @@ describe('Hotel Details Page', () => {
   describe('Error Handling', () => {
     it('should handle invalid hotel ID', () => {
       cy.visit('/hotel-details.html?id=99999');
-
+      cy.wait(1000);
+    
       // Should show error or redirect
       cy.get('#hotel-detail-container').should('be.visible');
     });
@@ -230,9 +255,10 @@ describe('Hotel Details Page', () => {
       cy.intercept('GET', 'http://localhost:3000/api/hotels/1', { statusCode: 404 }).as('hotelNotFound');
 
       cy.visit('/hotel-details.html?id=1');
-
+      cy.wait(1000);
+    
       cy.wait('@hotelNotFound');
-
+    
       // Should show error state
       cy.get('#detail-loading').should('not.be.visible');
     });

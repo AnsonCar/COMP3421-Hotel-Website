@@ -27,7 +27,8 @@ describe('Contact Form', () => {
     it('should validate required fields', () => {
       // Try to submit empty form
       cy.get('#contact-form').find('button[type="submit"]').click();
-
+      cy.wait(1000);
+  
       // Browser should prevent submission due to required fields
       // Form should still be visible
       cy.get('#contact-form').should('be.visible');
@@ -35,12 +36,17 @@ describe('Contact Form', () => {
 
     it('should validate email format', () => {
       cy.get('#name').type('Test User');
+      cy.wait(1000);
       cy.get('#email').type('invalid-email');
+      cy.wait(1000);
       cy.get('#subject').select('Reservation');
+      cy.wait(1000);
       cy.get('#message').type('Test message');
-
+      cy.wait(1000);
+  
       cy.get('#contact-form button[type="submit"]').click();
-
+      cy.wait(1000);
+  
       // Browser email validation should prevent submission
       // Form should still be visible
       cy.get('#contact-form').should('be.visible');
@@ -48,11 +54,16 @@ describe('Contact Form', () => {
 
     it('should accept valid form data', () => {
       cy.get('#name').type('Test User');
+      cy.wait(1000);
       cy.get('#email').type('test@example.com');
+      cy.wait(1000);
       cy.get('#phone').type('+1234567890');
+      cy.wait(1000);
       cy.get('#subject').select('Reservation');
+      cy.wait(1000);
       cy.get('#message').type('This is a test message for reservation inquiry.');
-
+      cy.wait(1000);
+  
       // Form should accept the data
       cy.get('#name').should('have.value', 'Test User');
       cy.get('#email').should('have.value', 'test@example.com');
@@ -65,15 +76,21 @@ describe('Contact Form', () => {
         statusCode: 201,
         body: { message: 'Contact message submitted successfully' }
       }).as('submitContact');
-
+  
       cy.get('#name').type('Test User');
+      cy.wait(1000);
       cy.get('#email').type('test@example.com');
+      cy.wait(1000);
       cy.get('#phone').type('+1234567890');
+      cy.wait(1000);
       cy.get('#subject').select('Reservation');
+      cy.wait(1000);
       cy.get('#message').type('This is a test message for reservation inquiry.');
-
+      cy.wait(1000);
+  
       cy.get('#contact-form').submit();
-
+      cy.wait(1000);
+  
       cy.wait('@submitContact');
     });
 
@@ -82,19 +99,24 @@ describe('Contact Form', () => {
          statusCode: 201,
          body: { message: 'Contact message submitted successfully' }
        }).as('submitContact');
-
+  
        cy.get('#name').type('Test User');
+       cy.wait(1000);
        cy.get('#email').type('test@example.com');
+       cy.wait(1000);
        cy.get('#subject').select('Feedback');
+       cy.wait(1000);
        cy.get('#message').type('Great service!');
-
+       cy.wait(1000);
+  
        cy.get('#contact-form button[type="submit"]').click();
-
+       cy.wait(1000);
+  
        cy.wait('@submitContact');
-
+  
        // Wait for JavaScript to process the response
        cy.wait(500);
-
+  
        // Check if success message becomes visible (JavaScript should add 'active' class)
        cy.get('#success-message').should('have.class', 'active');
        cy.get('#success-message').should('be.visible');
@@ -103,19 +125,24 @@ describe('Contact Form', () => {
 
     it('should handle submission errors', () => {
       cy.intercept('POST', 'http://localhost:3000/api/contact', { statusCode: 400 }).as('submitContactError');
-
+  
       cy.get('#name').type('Test User');
+      cy.wait(1000);
       cy.get('#email').type('test@example.com');
+      cy.wait(1000);
       cy.get('#subject').select('Complaint');
+      cy.wait(1000);
       cy.get('#message').type('Test complaint message');
-
+      cy.wait(1000);
+  
       cy.get('#contact-form button[type="submit"]').click();
-
+      cy.wait(1000);
+  
       cy.wait('@submitContactError');
-
+  
       // Wait for potential DOM update
       cy.wait(100);
-
+  
       // Should show error state - success message should not be visible
       cy.get('#success-message').should('not.be.visible');
       // Form should still be visible
@@ -127,20 +154,26 @@ describe('Contact Form', () => {
         statusCode: 201,
         body: { message: 'Contact message submitted successfully' }
       }).as('submitContact');
-
+  
       cy.get('#name').type('Test User');
+      cy.wait(1000);
       cy.get('#email').type('test@example.com');
+      cy.wait(1000);
       cy.get('#phone').type('+1234567890');
+      cy.wait(1000);
       cy.get('#subject').select('Other');
+      cy.wait(1000);
       cy.get('#message').type('Test message');
-
+      cy.wait(1000);
+  
       cy.get('#contact-form button[type="submit"]').click();
-
+      cy.wait(1000);
+  
       cy.wait('@submitContact');
-
+  
       // Wait for JavaScript to process and reset form
       cy.wait(500);
-
+  
       // Form should be reset (JavaScript calls form.reset())
       cy.get('#name').should('have.value', '');
       cy.get('#email').should('have.value', '');
@@ -199,11 +232,13 @@ describe('Contact Form', () => {
   describe('Navigation', () => {
     it('should navigate back to home', () => {
       cy.get('a#home').click();
+      cy.wait(1000);
       cy.url().should('include', 'index.html');
     });
 
     it('should open login modal', () => {
       cy.get('a#openLoginBtn').click();
+      cy.wait(1000);
       cy.get('#loginModal').should('be.visible');
     });
   });
