@@ -113,10 +113,19 @@ cd backend
 npm run db:testdata
 ```
 
+##
+```bash
+npm run 
+```
+
 ## test frontend
 
 ```bash
 cd cypress
+```
+
+```bash
+npm i
 ```
 
 ```bash
