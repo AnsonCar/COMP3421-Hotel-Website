@@ -16,6 +16,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
+
   frontend:
     build:
       context: ./frontend
