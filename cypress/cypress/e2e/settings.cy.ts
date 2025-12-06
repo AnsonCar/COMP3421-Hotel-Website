@@ -31,7 +31,7 @@ describe('Settings Page', () => {
   describe('Profile Section', () => {
     beforeEach(() => {
       cy.get('[data-section="profile"]').click();
-      ;
+
       cy.get('#profile-section').should('be.visible');
     });
 
@@ -44,9 +44,9 @@ describe('Settings Page', () => {
 
     it('should validate required fields', () => {
       cy.get('#profile-first-name').clear();
-      ;
+
       cy.get('#profile-form').find('button[type="submit"]').click();
-      ;
+
   
       // Should show validation
       cy.get('#profile-section').should('be.visible');
@@ -56,14 +56,14 @@ describe('Settings Page', () => {
       cy.intercept('PUT', 'http://localhost:3000/auth/profile').as('updateProfile');
   
       cy.get('#profile-first-name').clear().type('Updated');
-      ;
+
       cy.get('#profile-last-name').clear().type('User');
-      ;
+
       cy.get('#profile-phone').clear().type('+1987654321');
-      ;
+
   
       cy.get('#profile-form').submit();
-      ;
+
   
       cy.wait('@updateProfile').then((interception) => {
         expect(interception.response.statusCode).to.equal(200);
@@ -75,9 +75,9 @@ describe('Settings Page', () => {
       cy.intercept('PUT', 'http://localhost:3000/auth/profile', { statusCode: 400 }).as('updateProfileError');
   
       cy.get('#profile-first-name').clear().type('Test');
-      ;
+
       cy.get('#profile-form').submit();
-      ;
+
   
       cy.wait('@updateProfileError');
   
@@ -89,7 +89,7 @@ describe('Settings Page', () => {
   describe('Security Section', () => {
     beforeEach(() => {
       cy.get('[data-section="security"]').click();
-      ;
+
       cy.get('#security-section').should('be.visible');
     });
 
@@ -102,7 +102,7 @@ describe('Settings Page', () => {
 
     it('should validate password fields', () => {
       cy.get('#password-form').find('button[type="submit"]').click();
-      ;
+
   
       // Should show validation errors
       cy.get('#security-section').should('be.visible');
@@ -110,14 +110,14 @@ describe('Settings Page', () => {
 
     it('should validate password confirmation', () => {
       cy.get('#current-password').type('oldpass');
-      ;
+
       cy.get('#new-password').type('newpass123');
-      ;
+
       cy.get('#confirm-password').type('differentpass');
-      ;
+
   
       cy.get('#password-form').submit();
-      ;
+
   
       // Should show confirmation error
       cy.get('#security-section').should('be.visible');
@@ -127,14 +127,14 @@ describe('Settings Page', () => {
       cy.intercept('PUT', 'http://localhost:3000/auth/password').as('changePassword');
   
       cy.get('#current-password').type('oldpassword');
-      ;
+
       cy.get('#new-password').type('newpassword123');
-      ;
+
       cy.get('#confirm-password').type('newpassword123');
-      ;
+
   
       cy.get('#password-form').submit();
-      ;
+
   
       cy.wait('@changePassword').then((interception) => {
         expect(interception.response.statusCode).to.equal(200);
@@ -145,7 +145,7 @@ describe('Settings Page', () => {
   describe('Reservations Section', () => {
     beforeEach(() => {
       cy.get('[data-section="reservations"]').click();
-      ;
+
       cy.get('#reservations-section').should('be.visible');
     });
 
@@ -160,7 +160,7 @@ describe('Settings Page', () => {
 
     it('should filter reservations', () => {
       cy.get('#reservation-filter').select('upcoming');
-      ;
+
   
       // Should filter to show only upcoming reservations
       cy.get('.reservation-item').should('have.class', 'upcoming');
@@ -168,7 +168,7 @@ describe('Settings Page', () => {
 
     it('should allow modifying reservations', () => {
       cy.get('.reservation-item.upcoming .btn-outline').first().click();
-      ;
+
   
       // Should open modification modal or navigate
       // Implementation dependent
@@ -176,7 +176,7 @@ describe('Settings Page', () => {
 
     it('should allow canceling reservations', () => {
       cy.get('.reservation-item.upcoming .btn-danger').first().click();
-      ;
+
   
       // Should show confirmation dialog
       // Implementation dependent
@@ -186,7 +186,7 @@ describe('Settings Page', () => {
   describe('Account Section', () => {
     beforeEach(() => {
       cy.get('[data-section="account"]').click();
-      ;
+
       cy.get('#account-section').should('be.visible');
     });
 
@@ -199,11 +199,11 @@ describe('Settings Page', () => {
 
     it('should toggle notification settings', () => {
       cy.get('#email-notifications').uncheck();
-      ;
+
       cy.get('#email-notifications').should('not.be.checked');
   
       cy.get('#sms-notifications').check();
-      ;
+
       cy.get('#sms-notifications').should('be.checked');
     });
 
@@ -214,7 +214,7 @@ describe('Settings Page', () => {
 
     it('should show delete account confirmation', () => {
       cy.get('#delete-account-btn').click();
-      ;
+
   
       // Should open confirmation modal
       cy.get('#delete-account-modal').should('be.visible');
@@ -224,9 +224,9 @@ describe('Settings Page', () => {
   describe('Account Deletion', () => {
     beforeEach(() => {
       cy.get('[data-section="account"]').click();
-      ;
+
       cy.get('#delete-account-btn').click();
-      ;
+
       cy.get('#delete-account-modal').should('be.visible');
     });
 
@@ -234,9 +234,9 @@ describe('Settings Page', () => {
       cy.get('#confirm-delete').should('be.disabled');
   
       cy.get('#delete-confirm').check();
-      ;
+
       cy.get('#delete-password').type('password123');
-      ;
+
   
       cy.get('#confirm-delete').should('not.be.disabled');
     });
@@ -245,11 +245,11 @@ describe('Settings Page', () => {
       cy.intercept('DELETE', 'http://localhost:3000/auth/account').as('deleteAccount');
   
       cy.get('#delete-confirm').check();
-      ;
+
       cy.get('#delete-password').type('password123');
-      ;
+
       cy.get('#confirm-delete').click();
-      ;
+
   
       cy.wait('@deleteAccount').then((interception) => {
         expect(interception.response.statusCode).to.equal(200);
@@ -262,11 +262,11 @@ describe('Settings Page', () => {
       cy.intercept('DELETE', 'http://localhost:3000/auth/account', { statusCode: 400 }).as('deleteAccountError');
   
       cy.get('#delete-confirm').check();
-      ;
+
       cy.get('#delete-password').type('wrongpassword');
-      ;
+
       cy.get('#confirm-delete').click();
-      ;
+
   
       cy.wait('@deleteAccountError');
   
@@ -280,19 +280,19 @@ describe('Settings Page', () => {
       cy.get('[data-section="profile"]').should('have.class', 'active');
   
       cy.get('[data-section="security"]').click();
-      ;
+
       cy.get('#security-section').should('be.visible');
       cy.get('#profile-section').should('not.be.visible');
   
       cy.get('[data-section="reservations"]').click();
-      ;
+
       cy.get('#reservations-section').should('be.visible');
       cy.get('#security-section').should('not.be.visible');
     });
 
     it('should navigate back to home', () => {
       cy.get('#home').click();
-      ;
+
       cy.url().should('include', 'index.html');
     });
   });
@@ -302,7 +302,7 @@ describe('Settings Page', () => {
       cy.intercept('GET', 'http://localhost:3000/auth/profile').as('getProfile');
 
       cy.reload();
-      ;
+
   
       cy.wait('@getProfile').then((interception) => {
         expect(interception.response.statusCode).to.equal(200);
@@ -313,7 +313,7 @@ describe('Settings Page', () => {
       cy.intercept('GET', 'http://localhost:3000/auth/profile', { statusCode: 401 }).as('getProfileError');
 
       cy.reload();
-      ;
+
   
       cy.wait('@getProfileError');
   
