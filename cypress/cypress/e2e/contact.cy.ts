@@ -27,7 +27,7 @@ describe('Contact Form', () => {
     it('should validate required fields', () => {
       // Try to submit empty form
       cy.get('#contact-form').find('button[type="submit"]').click();
-      cy.wait(1000);
+      ;
   
       // Browser should prevent submission due to required fields
       // Form should still be visible
@@ -36,16 +36,16 @@ describe('Contact Form', () => {
 
     it('should validate email format', () => {
       cy.get('#name').type('Test User');
-      cy.wait(1000);
+      ;
       cy.get('#email').type('invalid-email');
-      cy.wait(1000);
+      ;
       cy.get('#subject').select('Reservation');
-      cy.wait(1000);
+      ;
       cy.get('#message').type('Test message');
-      cy.wait(1000);
+      ;
   
       cy.get('#contact-form button[type="submit"]').click();
-      cy.wait(1000);
+      ;
   
       // Browser email validation should prevent submission
       // Form should still be visible
@@ -54,15 +54,15 @@ describe('Contact Form', () => {
 
     it('should accept valid form data', () => {
       cy.get('#name').type('Test User');
-      cy.wait(1000);
+      ;
       cy.get('#email').type('test@example.com');
-      cy.wait(1000);
+      ;
       cy.get('#phone').type('+1234567890');
-      cy.wait(1000);
+      ;
       cy.get('#subject').select('Reservation');
-      cy.wait(1000);
+      ;
       cy.get('#message').type('This is a test message for reservation inquiry.');
-      cy.wait(1000);
+      ;
   
       // Form should accept the data
       cy.get('#name').should('have.value', 'Test User');
@@ -78,18 +78,18 @@ describe('Contact Form', () => {
       }).as('submitContact');
   
       cy.get('#name').type('Test User');
-      cy.wait(1000);
+      ;
       cy.get('#email').type('test@example.com');
-      cy.wait(1000);
+      ;
       cy.get('#phone').type('+1234567890');
-      cy.wait(1000);
+      ;
       cy.get('#subject').select('Reservation');
-      cy.wait(1000);
+      ;
       cy.get('#message').type('This is a test message for reservation inquiry.');
-      cy.wait(1000);
+      ;
   
       cy.get('#contact-form').submit();
-      cy.wait(1000);
+      ;
   
       cy.wait('@submitContact');
     });
@@ -101,16 +101,16 @@ describe('Contact Form', () => {
        }).as('submitContact');
   
        cy.get('#name').type('Test User');
-       cy.wait(1000);
+       ;
        cy.get('#email').type('test@example.com');
-       cy.wait(1000);
+       ;
        cy.get('#subject').select('Feedback');
-       cy.wait(1000);
+       ;
        cy.get('#message').type('Great service!');
-       cy.wait(1000);
+       ;
   
        cy.get('#contact-form button[type="submit"]').click();
-       cy.wait(1000);
+       ;
   
        cy.wait('@submitContact');
   
@@ -127,16 +127,16 @@ describe('Contact Form', () => {
       cy.intercept('POST', 'http://localhost:3000/api/contact', { statusCode: 400 }).as('submitContactError');
   
       cy.get('#name').type('Test User');
-      cy.wait(1000);
+      ;
       cy.get('#email').type('test@example.com');
-      cy.wait(1000);
+      ;
       cy.get('#subject').select('Complaint');
-      cy.wait(1000);
+      ;
       cy.get('#message').type('Test complaint message');
-      cy.wait(1000);
+      ;
   
       cy.get('#contact-form button[type="submit"]').click();
-      cy.wait(1000);
+      ;
   
       cy.wait('@submitContactError');
   
@@ -156,18 +156,18 @@ describe('Contact Form', () => {
       }).as('submitContact');
   
       cy.get('#name').type('Test User');
-      cy.wait(1000);
+      ;
       cy.get('#email').type('test@example.com');
-      cy.wait(1000);
+      ;
       cy.get('#phone').type('+1234567890');
-      cy.wait(1000);
+      ;
       cy.get('#subject').select('Other');
-      cy.wait(1000);
+      ;
       cy.get('#message').type('Test message');
-      cy.wait(1000);
+      ;
   
       cy.get('#contact-form button[type="submit"]').click();
-      cy.wait(1000);
+      ;
   
       cy.wait('@submitContact');
   
@@ -232,13 +232,13 @@ describe('Contact Form', () => {
   describe('Navigation', () => {
     it('should navigate back to home', () => {
       cy.get('a#home').click();
-      cy.wait(1000);
+      ;
       cy.url().should('include', 'index.html');
     });
 
     it('should open login modal', () => {
       cy.get('a#openLoginBtn').click();
-      cy.wait(1000);
+      ;
       cy.get('#loginModal').should('be.visible');
     });
   });

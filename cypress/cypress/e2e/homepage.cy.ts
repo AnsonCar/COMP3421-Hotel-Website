@@ -27,7 +27,7 @@ describe('Homepage', () => {
 
     it('should navigate to hotel details when clicking hotel', () => {
       cy.get('.exclusive-content-container .hotel a').first().click();
-      cy.wait(1000);
+      ;
   
       // Should navigate to hotel details page
       cy.url().should('include', 'hotel-details.html');
@@ -39,11 +39,11 @@ describe('Homepage', () => {
   
       // Test next button
       cy.get('.nav-arrow.next').click();
-      cy.wait(1000);
+      ;
   
       // Test prev button
       cy.get('.nav-arrow.prev').click();
-      cy.wait(1000);
+      ;
     });
   });
 
@@ -57,13 +57,13 @@ describe('Homepage', () => {
 
     it('should navigate to home when clicking logo', () => {
       cy.get('#home').click();
-      cy.wait(1000);
+      ;
       cy.url().should('include', 'index.html');
     });
 
     it('should open login modal when clicking login button', () => {
       cy.get('#openLoginBtn').click();
-      cy.wait(1000);
+      ;
       cy.get('#loginModal').should('be.visible');
     });
   });
@@ -76,13 +76,13 @@ describe('Homepage', () => {
 
     it('should navigate to search page when clicking search', () => {
       cy.get('#search-btn').click();
-      cy.wait(1000);
+      ;
       cy.url().should('include', 'search.html');
     });
 
     it('should navigate to search page when pressing enter in search input', () => {
       cy.get('#search-input').type('test{enter}');
-      cy.wait(1000);
+      ;
       cy.url().should('include', 'search.html');
     });
   });
@@ -95,7 +95,7 @@ describe('Homepage', () => {
 
     it('should have contact button that navigates to contact page', () => {
       cy.get('.contact-btn').click();
-      cy.wait(1000);
+      ;
       cy.url().should('include', 'contact.html');
     });
   });
@@ -106,7 +106,7 @@ describe('Homepage', () => {
       cy.intercept('GET', 'http://localhost:3000/api/hotels/featured').as('getFeaturedHotels');
 
       cy.reload();
-      cy.wait(1000);
+      ;
 
       // Wait for API call and verify it was made
       cy.wait('@getFeaturedHotels').then((interception) => {
@@ -119,7 +119,7 @@ describe('Homepage', () => {
       cy.intercept('GET', 'http://localhost:3000/api/hotels/featured', { statusCode: 500 }).as('getFeaturedHotelsError');
 
       cy.reload();
-      cy.wait(1000);
+      ;
 
       // Should still display page even with API error
       cy.get('.exclusive-content').should('be.visible');

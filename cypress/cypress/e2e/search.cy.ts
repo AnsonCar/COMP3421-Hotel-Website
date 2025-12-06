@@ -19,26 +19,26 @@ describe('Search Functionality', () => {
   describe('Search Input', () => {
     it('should allow typing in search input', () => {
       cy.get('#search-input').type('luxury hotel');
-      cy.wait(1000);
+      ;
       cy.get('#search-input').should('have.value', 'luxury hotel');
     });
 
     it('should trigger search when clicking search button', () => {
       cy.get('#search-input').type('test search');
-      cy.wait(1000);
+      ;
       cy.get('#search-btn').click();
-      cy.wait(1000);
+      ;
   
       // Should make API call
-      cy.wait(1000); // Wait for potential results
+      ; // Wait for potential results
     });
 
     it('should trigger search when pressing enter', () => {
       cy.get('#search-input').type('test search{enter}');
-      cy.wait(1000);
+      ;
   
       // Should make API call
-      cy.wait(1000);
+      ;
     });
   });
 
@@ -47,7 +47,7 @@ describe('Search Functionality', () => {
       cy.intercept('GET', 'http://localhost:3000/api/hotels*').as('searchHotels');
 
       cy.get('#search-input').type('luxury{enter}');
-      cy.wait(1000);
+      ;
   
       cy.wait('@searchHotels').then((interception) => {
         expect(interception.request.url).to.include('/api/hotels');
@@ -59,7 +59,7 @@ describe('Search Functionality', () => {
       cy.intercept('GET', 'http://localhost:3000/api/hotels*').as('searchHotels');
 
       cy.get('#search-input').type('5 star hotel{enter}');
-      cy.wait(1000);
+      ;
   
       cy.wait('@searchHotels').then((interception) => {
         const url = new URL(interception.request.url);
@@ -69,7 +69,7 @@ describe('Search Functionality', () => {
 
     it('should display search results', () => {
       cy.get('#search-input').type('hotel{enter}');
-      cy.wait(1000);
+      ;
   
       // Wait for results to load
       cy.get('#search-results').should('not.be.empty');
@@ -85,7 +85,7 @@ describe('Search Functionality', () => {
       cy.intercept('GET', 'http://localhost:3000/api/hotels*', { body: { hotels: [] } }).as('emptySearch');
 
       cy.get('#search-input').type('nonexistent hotel{enter}');
-      cy.wait(1000);
+      ;
   
       cy.wait('@emptySearch');
   
@@ -97,7 +97,7 @@ describe('Search Functionality', () => {
       cy.intercept('GET', 'http://localhost:3000/api/hotels*', { statusCode: 500 }).as('searchError');
 
       cy.get('#search-input').type('test{enter}');
-      cy.wait(1000);
+      ;
   
       cy.wait('@searchError');
   
@@ -110,7 +110,7 @@ describe('Search Functionality', () => {
     beforeEach(() => {
       // Ensure we have some search results
       cy.get('#search-input').type('hotel{enter}');
-      cy.wait(1000);
+      ;
       cy.wait(2000); // Wait for results
     });
 
@@ -126,7 +126,7 @@ describe('Search Functionality', () => {
 
     it('should navigate to hotel details when clicking hotel card', () => {
       cy.get('.hotel-card').first().click();
-      cy.wait(1000);
+      ;
   
       cy.url().should('include', 'hotel-details.html');
       cy.url().should('include', 'id=');
@@ -134,7 +134,7 @@ describe('Search Functionality', () => {
 
     it('should have book now buttons that work', () => {
       cy.get('.hotel-card .book-btn').first().click();
-      cy.wait(1000);
+      ;
   
       cy.url().should('include', 'hotel-details.html');
     });
@@ -143,13 +143,13 @@ describe('Search Functionality', () => {
   describe('Navigation', () => {
     it('should navigate back to home when clicking logo', () => {
       cy.get('#home').click();
-      cy.wait(1000);
+      ;
       cy.url().should('include', 'index.html');
     });
 
     it('should open login modal', () => {
       cy.get('#openLoginBtn').click();
-      cy.wait(1000);
+      ;
       cy.get('#loginModal').should('be.visible');
     });
   });
@@ -158,11 +158,11 @@ describe('Search Functionality', () => {
     it('should scroll to top when clicking back to top button', () => {
       // Scroll down first
       cy.scrollTo('bottom');
-      cy.wait(1000);
+      ;
   
       // Click back to top
       cy.get('#back-to-top').click();
-      cy.wait(1000);
+      ;
   
       // Should be at top of page
       cy.window().its('scrollY').should('equal', 0);
