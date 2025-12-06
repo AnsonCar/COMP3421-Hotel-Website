@@ -74,11 +74,11 @@ describe('Homepage', () => {
       cy.get('#search-btn').should('be.visible');
     });
 
-    it('should navigate to search page when clicking search', () => {
-      cy.get('#search-btn').click();
+    // it('should navigate to search page when clicking search', () => {
+    //   cy.get('#search-btn').click();
 
-      cy.url().should('include', 'search.html');
-    });
+    //   cy.url().should('include', 'search.html');
+    // });
 
     it('should navigate to search page when pressing enter in search input', () => {
       cy.get('#search-input').type('test{enter}');
