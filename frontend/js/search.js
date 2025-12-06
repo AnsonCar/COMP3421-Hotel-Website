@@ -368,6 +368,32 @@ function displaySearchResultsWithPagination(results, query) {
     resultsInfo.innerHTML = `Showing <strong>${startIndex}-${endIndex}</strong> of <strong>${totalResults}</strong> results`;
 }
 
+// Function to generate star rating HTML
+function generateStarRating(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+    let starsHTML = '';
+
+    // Full stars
+    for (let i = 0; i < fullStars; i++) {
+        starsHTML += '<i class="fas fa-star"></i>';
+    }
+
+    // Half star
+    if (hasHalfStar) {
+        starsHTML += '<i class="fas fa-star-half-alt"></i>';
+    }
+
+    // Empty stars
+    for (let i = 0; i < emptyStars; i++) {
+        starsHTML += '<i class="far fa-star"></i>';
+    }
+
+    return starsHTML;
+}
+
 // Function to create a hotel card
 function createHotelCard(hotel) {
     const card = document.createElement('div');
@@ -400,6 +426,7 @@ function createHotelCard(hotel) {
             <h3 class="hotel-name">${hotel.name}</h3>
             <div class="hotel-location"><i class="fas fa-map-marker-alt"></i> ${location}</div>
             <div class="hotel-address">${hotel.address1}</div>
+            <div class="hotel-rating">${generateStarRating(hotel.star_rating)} ${hotel.user_rating || hotel.star_rating}</div>
             <div class="hotel-price">${priceDisplay} <span>per night</span></div>
             <div class="hotel-amenities">
                 ${getDefaultAmenities(hotel.star_rating)}
