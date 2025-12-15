@@ -1,49 +1,6 @@
 // API Configuration is defined in common.js
 
 // JWT Token Management
-const AuthToken = {
-    set(token) {
-        localStorage.setItem('authToken', token);
-    },
-
-    get() {
-        return localStorage.getItem('authToken');
-    },
-
-    remove() {
-        localStorage.removeItem('authToken');
-    },
-
-    isValid() {
-        const token = this.get();
-        if (!token) return false;
-
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            const currentTime = Date.now() / 1000;
-            return payload.exp > currentTime;
-        } catch (error) {
-            return false;
-        }
-    },
-
-    getUserFromToken() {
-        const token = this.get();
-        if (!token) return null;
-
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            return {
-                userId: payload.sub,
-                email: payload.email,
-                firstName: payload.firstName,
-                lastName: payload.lastName
-            };
-        } catch (error) {
-            return null;
-        }
-    }
-};
 
 document.addEventListener('DOMContentLoaded', function() {
     // Settings navigation
@@ -131,8 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
     // Password Form
     const passwordForm = document.getElementById('password-form');
-    const passwordInput = document.getElementById('new-password');
-    const confirmInput = document.getElementById('confirm-password');
+    const passwordInput = document.getElementById('new-password-security');
+    const confirmInput = document.getElementById('confirm-password-security');
     
     if (passwordForm) {
         passwordForm.addEventListener('submit', async function (e) {
@@ -144,8 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const currentPassword = document.getElementById('current-password')?.value.trim() ?? '';
-            const newPassword = document.getElementById('new-password')?.value.trim() ?? '';
-            const confirmPassword = document.getElementById('confirm-password')?.value.trim() ?? '';
+            const newPassword = document.getElementById('new-password-security')?.value.trim() ?? '';
+            const confirmPassword = document.getElementById('confirm-password-security')?.value.trim() ?? '';
 
             if (!currentPassword) {
                 showNotification('Please enter your current password', 'error');
