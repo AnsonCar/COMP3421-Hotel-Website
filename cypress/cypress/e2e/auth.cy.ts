@@ -45,7 +45,7 @@ describe('Authentication', () => {
     });
 
     it('should show error for invalid credentials', () => {
-      cy.get('#username').type('invaliduser');
+      cy.get('#login-email').type('invaliduser');
 
       cy.get('#password').type('invalidpass');
 
@@ -58,7 +58,7 @@ describe('Authentication', () => {
 
     it('should login successfully with valid credentials', () => {
       // This test assumes test user exists in database
-      cy.get('#username').type('testuser');
+      cy.get('#login-email').type('testuser');
 
       cy.get('#password').type('testpass123');
 
@@ -88,7 +88,6 @@ describe('Authentication', () => {
 
       cy.get('#email').type('test@example.com');
 
-      cy.get('#new-username').type('testuser');
 
       cy.get('#new-password').type('password123');
 
@@ -108,7 +107,6 @@ describe('Authentication', () => {
 
       cy.get('#email').type(`test${timestamp}@example.com`);
 
-      cy.get('#new-username').type(`testuser${timestamp}`);
 
       cy.get('#new-password').type('password123');
 
