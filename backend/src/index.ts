@@ -26,7 +26,7 @@ app.get('/', (c) => {
 })
 
 // User routes
-app.route('/auth', userRouter)
+app.route('/api/auth', userRouter)
 
 // Hotel routes
 app.route('/api', hotelRouter)

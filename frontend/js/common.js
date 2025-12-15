@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = `${window.location.protocol}//${window.location.hostname}`
 
 // JWT Token Management
 const AuthToken = {
@@ -83,7 +83,7 @@ async function apiCall(endpoint, options = {}) {
 const AuthAPI = {
     async register(userData) {
         try {
-            const response = await apiCall('/auth/register', {
+            const response = await apiCall('/api/auth/register', {
                 method: 'POST',
                 body: JSON.stringify(userData)
             });
@@ -95,7 +95,7 @@ const AuthAPI = {
 
     async login(credentials) {
         try {
-            const response = await apiCall('/auth/login', {
+            const response = await apiCall('/api/auth/login', {
                 method: 'POST',
                 body: JSON.stringify(credentials)
             });
@@ -112,7 +112,7 @@ const AuthAPI = {
 
     async getUserProfile() {
         try {
-            const response = await apiCall('/auth/profile');
+            const response = await apiCall('/api/auth/profile');
             return response.user;
         } catch (error) {
             throw new Error(`Failed to get user profile: ${error.message}`);
@@ -121,7 +121,7 @@ const AuthAPI = {
 
     async updateUserProfile(userData) {
         try {
-            const response = await apiCall('/auth/profile', {
+            const response = await apiCall('/api/auth/profile', {
                 method: 'PUT',
                 body: JSON.stringify(userData)
             });
@@ -133,7 +133,7 @@ const AuthAPI = {
 
     async updatePassword(passwordData) {
         try {
-            const response = await apiCall('/auth/password', {
+            const response = await apiCall('/api/auth/password', {
                 method: 'PUT',
                 body: JSON.stringify(passwordData)
             });
@@ -145,7 +145,7 @@ const AuthAPI = {
 
     async deleteAccount() {
         try {
-            const response = await apiCall('/auth/account', {
+            const response = await apiCall('/api/auth/account', {
                 method: 'DELETE'
             });
 
@@ -270,7 +270,7 @@ if (loginModal && openLoginBtn && closeModal) {
 
             try {
                 // Send forgot password request to API
-                const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+                const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

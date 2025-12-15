@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/profile`, {
+                const response = await fetch(`${API_BASE_URL}/api/auth/profile`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/password`, {
+                const response = await fetch(`${API_BASE_URL}/api/auth/password`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/account`, {
+                const response = await fetch(`${API_BASE_URL}/api/auth/account`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${AuthToken.get()}`
