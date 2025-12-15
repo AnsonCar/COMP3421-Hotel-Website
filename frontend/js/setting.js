@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     settingsNavItems.forEach(item => {
         item.addEventListener('click', function() {
             const targetSection = this.getAttribute('data-section');
+            console.log('Switching to: ' + targetSection);
 
             // Remove active class from all nav items
             settingsNavItems.forEach(navItem => navItem.classList.remove('active'));
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     section.classList.add('active');
                 }
             });
+            console.log('Active sections: ' + document.querySelectorAll('.settings-section.active').length);
         });
     });
     
