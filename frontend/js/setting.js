@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     section.classList.add('active');
                 }
             });
+            if (targetSection === 'reservations') {
+                loadReservations();
+            }
             console.log('Active sections: ' + document.querySelectorAll('.settings-section.active').length);
         });
     });
@@ -151,17 +154,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Reservation Filtering
     const reservationFilter = document.getElementById('reservation-filter');
-    const reservationItems = document.querySelectorAll('.reservation-item');
     
     if (reservationFilter) {
         reservationFilter.addEventListener('change', function() {
-            const filterValue = this.value;
-            
-            reservationItems.forEach(item => {
-                item.style.display = filterValue === 'all' || item.classList.contains(filterValue)
-                    ? 'block'
-                    : 'none';
-            });
+            applyReservationFilter();
         });
     }
     
@@ -437,6 +433,185 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 Math.random() < 0.95 ? resolve(data) : reject(new Error('API call failed'));
             }, 800);
+        });
+    }
+    
+    async function loadReservations() {
+        const list = document.querySelector('.reservations-list');
+        if (!list) return;
+        
+        if (!AuthToken.isValid()) {
+            showNotification('Please log in to view reservations', 'error');
+            renderReservations([]);
+            return;
+        }
+        
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/bookings`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${AuthToken.get()}`
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const bookings = await response.json();
+            
+            renderReservations(bookings);
+        } catch (error) {
+            console.error('Failed to load reservations:', error);
+            showNotification('Failed to load reservations', 'error');
+            renderReservations([]);
+        }
+    }
+    
+    function renderReservations(bookings) {
+        const list = document.querySelector('.reservations-list');
+        if (!list) return;
+        
+        list.innerHTML = '';
+        
+        if (!bookings || bookings.length === 0) {
+            list.innerHTML = '<p class="empty-state">No reservations found.</p>';
+            const pagination = document.querySelector('#reservations-section .pagination');
+            if (pagination) pagination.style.display = 'none';
+            return;
+        }
+        
+        bookings.forEach(booking => {
+            const item = createReservationItem(booking);
+            list.appendChild(item);
+        });
+        
+        // Re-apply current filter
+        applyReservationFilter();
+        
+        const pagination = document.querySelector('#reservations-section .pagination');
+        if (pagination) pagination.style.display = 'flex';
+    }
+    
+    function createReservationItem(booking) {
+        let statusClass;
+        switch (booking.status) {
+            case 'confirmed':
+                statusClass = 'upcoming';
+                break;
+            case 'completed':
+                statusClass = 'past';
+                break;
+            case 'canceled':
+                statusClass = 'canceled';
+                break;
+            default:
+                statusClass = 'upcoming';
+        }
+        
+        const capitalizedStatus = booking.status.charAt(0).toUpperCase() + booking.status.slice(1);
+        const confirmation = booking.confirmationNumber || `#LH${booking.id}`;
+        
+        const checkIn = new Date(booking.dates.checkIn);
+        const checkOut = new Date(booking.dates.checkOut);
+        
+        const dateStr = formatDateRange(checkIn, checkOut);
+        
+        const hotel = booking.hotel;
+        let imageUrl = hotel.imageUrl;
+        if (!imageUrl) {
+            const roomIndex = (booking.id % 3) + 1;
+            imageUrl = `/images/room-${roomIndex}.jpg`;
+        }
+        
+        let actionsHtml = '';
+        switch (booking.status) {
+            case 'confirmed':
+                actionsHtml = `
+                    <button class="btn btn-outline btn-sm" data-action="modify">Modify</button>
+                    <button class="btn btn-danger btn-sm" data-action="cancel">Cancel</button>
+                `;
+                break;
+            case 'completed':
+                actionsHtml = `
+                    <button class="btn btn-outline btn-sm" data-action="view-details">View Details</button>
+                    <button class="btn btn-primary btn-sm" data-action="book-again">Book Again</button>
+                `;
+                break;
+            case 'canceled':
+                actionsHtml = `
+                    <button class="btn btn-primary btn-sm" data-action="book-again">Book Again</button>
+                `;
+                break;
+            default:
+                actionsHtml = '';
+        }
+        
+        const item = document.createElement('div');
+        item.className = `reservation-item ${statusClass}`;
+        
+        item.innerHTML = `
+            <div class="reservation-header">
+                <div class="reservation-status ${statusClass}">${capitalizedStatus}</div>
+                <div class="reservation-id">Confirmation #${confirmation}</div>
+            </div>
+            <div class="reservation-details">
+                <div class="hotel-info">
+                    <img src="${imageUrl}" alt="${hotel.name}" class="hotel-thumbnail">
+                    <div class="hotel-details">
+                        <h4 class="hotel-name">${hotel.name}</h4>
+                        <p class="room-type">${hotel.roomType || 'Standard Room'}</p>
+                        <p class="reservation-dates"><i class="fas fa-calendar-alt"></i> ${dateStr}</p>
+                    </div>
+                </div>
+                <div class="reservation-actions">
+                    ${actionsHtml}
+                </div>
+            </div>
+        `;
+        
+        return item;
+    }
+    
+    function getReservationActions(status) {
+        switch (status) {
+            case 'confirmed':
+                return ['Modify', 'Cancel'];
+            case 'completed':
+                return ['View Details', 'Book Again'];
+            case 'canceled':
+                return ['Book Again'];
+            default:
+                return [];
+        }
+    }
+    
+    function formatDateRange(start, end) {
+        const monthFormatter = new Intl.DateTimeFormat('en-US', {
+            month: 'short',
+            day: 'numeric'
+        });
+        
+        const yearFormatter = new Intl.DateTimeFormat('en-US', {
+            year: 'numeric'
+        });
+        
+        const startStr = monthFormatter.format(start);
+        const endStr = monthFormatter.format(end);
+        const year = yearFormatter.format(end);
+        
+        return `${startStr} - ${endStr}, ${year}`;
+    }
+    
+    function applyReservationFilter() {
+        const filter = document.getElementById('reservation-filter');
+        if (!filter) return;
+        
+        const filterValue = filter.value;
+        const items = document.querySelectorAll('.reservation-item');
+        
+        items.forEach(item => {
+            item.style.display = (filterValue === 'all' || item.classList.contains(filterValue)) ? 'block' : 'none';
         });
     }
 });

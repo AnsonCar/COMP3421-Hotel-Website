@@ -1,6 +1,6 @@
 import { db } from '../db/index.js';
 import { bookings, hotels } from '../db/schema.js';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, desc } from 'drizzle-orm';
 
 // Create a new booking
 export const createBooking = async (c: any) => {
@@ -75,6 +75,55 @@ export const getUserBookings = async (c: any) => {
     return c.json({ bookings: userBookings }, 200);
   } catch (error) {
     console.error('Get user bookings error:', error);
+    return c.json({ error: 'Internal server error' }, 500);
+  }
+};
+
+// Get bookings for settings page
+export const getBookings = async (c: any) => {
+  try {
+    const jwtPayload = c.get('jwtPayload');
+    if (!jwtPayload || !jwtPayload.sub) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+    const userId = parseInt(jwtPayload.sub);
+    if (isNaN(userId)) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const rawBookings = await db
+      .select({
+        id: bookings.bookingId,
+        status: bookings.status,
+        checkIn: bookings.checkInDate,
+        checkOut: bookings.checkOutDate,
+        hotelName: hotels.name,
+        roomType: hotels.roomType,
+        hotelId: hotels.hotelId,
+      })
+      .from(bookings)
+      .innerJoin(hotels, eq(bookings.hotelId, hotels.hotelId))
+      .where(eq(bookings.userId, userId))
+      .orderBy(desc(bookings.checkInDate));
+
+    const bookingsArray = rawBookings.map(booking => ({
+      id: booking.id,
+      status: booking.status,
+      confirmationNumber: `#LH${booking.id}`,
+      hotel: {
+        name: booking.hotelName,
+        imageUrl: `images/room-${(booking.hotelId % 3) + 1}.jpg`,
+        roomType: booking.roomType || 'Standard Room'
+      },
+      dates: {
+        checkIn: new Date(booking.checkIn).toISOString(),
+        checkOut: new Date(booking.checkOut).toISOString()
+      }
+    }));
+
+    return c.json(bookingsArray, 200);
+  } catch (error) {
+    console.error('Get bookings error:', error);
     return c.json({ error: 'Internal server error' }, 500);
   }
 };

@@ -1,10 +1,10 @@
-import { serve } from '@hono/node-server'
-import userRouter from './view/user.js'
-import hotelRouter from './view/hotel.js'
-import bookingRouter from './view/booking.js'
-import reviewRouter from './view/review.js'
-import contactRouter from './view/contact.js'
-import { Hono } from 'hono'
+import { serve } from '@hono/node-server';
+import { Hono } from 'hono';
+import bookingRouter from './view/booking.js';
+import contactRouter from './view/contact.js';
+import hotelRouter from './view/hotel.js';
+import reviewRouter from './view/review.js';
+import userRouter from './view/user.js';
 const app = new Hono()
 
 // CORS middleware

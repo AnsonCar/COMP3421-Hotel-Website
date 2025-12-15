@@ -4,7 +4,7 @@ import { env } from '../env.js'
 import type { JwtVariables } from 'hono/jwt'
 import {
   createBooking,
-  getUserBookings,
+  getBookings,
   getBookingDetails,
   updateBooking,
   cancelBooking
@@ -21,7 +21,7 @@ bookingRouter.use('*', jwt({ secret: env.JWT_SECRET }))
 bookingRouter.post('/bookings', createBooking)
 
 // Get user's bookings
-bookingRouter.get('/bookings', getUserBookings)
+bookingRouter.get('/bookings', getBookings)
 
 // Get booking details
 bookingRouter.get('/bookings/:id', getBookingDetails)
