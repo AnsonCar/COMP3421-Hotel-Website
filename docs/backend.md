@@ -102,6 +102,7 @@
   - 建置：`npm run build` (tsc)，運行 `npm start`。
   - Docker：使用 `docker-compose.yml` (根目錄) 整合後端、PostgreSQL 和 Traefik。
 
+
 ## 5. 詳細代碼介紹
 以下詳細說明主要代碼模組，包含邏輯流程和關鍵片段 (參考檔案連結)。
 
@@ -111,9 +112,14 @@
 - 建構 DATABASE_URL，若未設則使用預設 localhost:5432。
 - 匯出 env 物件，供其他模組使用 (e.g., db/index.ts)。
 
+![](./backend_env.png)
+
 ### 資料庫 Schema ([`schema.ts`](backend/src/db/schema.ts))
 - 使用 Drizzle pg-core 定義表格、外鍵 (e.g., reviews.userId references users.userId)、枚舉 (bookingStatusEnum)、檢查 (e.g., guests > 0, checkOutDate > checkInDate)。
 - 支援 ILIKE 模糊搜尋 (PostgreSQL 特定)。
+
+![](./table_1.png)
+![](./table_2.png)
 
 ### 酒店控制器 ([`hotelController.ts`](backend/src/controller/hotelController.ts))
 - **getHotels**：解析 query (starRating, minPrice 等)，建構 conditions 陣列 (e.g., `eq(hotels.starRating, parseInt(starRating))`, `sql`${price} >= ${min}` for 範圍, ILIKE for 地址/名稱搜尋)，`where(and(...))`，排序 switch (asc/desc)。
@@ -141,6 +147,8 @@
 - 路由掛載：app.route('/auth', userRouter), app.route('/api', hotelRouter 等)。
 - 根路由 '/' 返回 'Hello Hono!'。
 
+![](./index_api.png)
+
 ## 6. 依賴與安全
 - **主要依賴**：
   - `hono` & `@hono/node-server`：API 框架。
@@ -153,6 +161,7 @@
 ## 7. 測試與除錯
 - 整合 Cypress E2E 測試 (根目錄 `cypress/`)，後端間接透過 API 測試。
 - 除錯：使用 `console.log` 或 VS Code 偵錯器；檢查遷移狀態 (`drizzle/meta/`)。
+![](./test.png)
 
 ## 8. 未來改進
 - 新增驗證中介軟體 (e.g., Zod)。
