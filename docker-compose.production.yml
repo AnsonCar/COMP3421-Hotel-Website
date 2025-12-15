@@ -2,10 +2,12 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: ./dockerfile.prod
+      dockerfile: ./dockerfile
     container_name: ${PROJECT_NAME}-frontend
     depends_on:
       - backend
+    ports:
+      - 9991:80
       
   backend:
     build:
