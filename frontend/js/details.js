@@ -41,8 +41,8 @@ function checkLoginStatus() {
     const reviewForm = document.querySelector('.write-review-form');
     if (!reviewForm) return;
 
-    // Check if user has a token (logged in)
-    const hasToken = AuthToken.isValid() || localStorage.getItem('token');
+    // Check if user has a valid token (logged in)
+    const hasToken = AuthToken.isValid();
 
     if (hasToken) {
         reviewForm.style.display = 'block';
@@ -166,16 +166,7 @@ async function loadHotelDetails(hotelId) {
 // Get hotel by ID from API
 async function getHotelById(hotelId) {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}`);
-
-        if (!response.ok) {
-            if (response.status === 404) {
-                return null; // Hotel not found
-            }
-            throw new Error(`Failed to fetch hotel: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
+        const data = await apiCall(`/api/hotels/${hotelId}`);
         const hotel = data.hotel;
         const reviews = data.reviews || [];
 
@@ -217,6 +208,9 @@ async function getHotelById(hotelId) {
 
         return processedHotel;
     } catch (error) {
+        if (error.message.includes('404')) {
+            return null;
+        }
         console.error("Error fetching hotel data:", error);
         return null;
     }
@@ -225,16 +219,17 @@ async function getHotelById(hotelId) {
 // Get hotel reviews from API
 async function getHotelReviews(hotelId) {
     try {
-        const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}/reviews`);
+        const data = await apiCall(`/api/hotels/${hotelId}/reviews`);
+        console.log("Reviews API response:", data); // Debug log to inspect response structure
 
-        if (!response.ok) {
-            if (response.status === 404) {
-                return []; // No reviews found
-            }
-            throw new Error(`Failed to fetch reviews: ${response.status} ${response.statusText}`);
+        // Handle both direct array and wrapped {reviews: [...]} responses
+        let reviews = data.reviews || data || [];
+
+        // Ensure it's an array
+        if (!Array.isArray(reviews)) {
+            console.warn("Reviews data is not an array. Type:", typeof reviews, "Value:", reviews);
+            reviews = [];
         }
-
-        const reviews = await response.json();
 
         // Process reviews data to match frontend expectations
         return reviews.map(review => ({
@@ -1547,12 +1542,8 @@ function openBookingModal(roomName, roomPrice) {
 
             try {
                 // Submit booking to API
-                const response = await fetch(`${API_BASE_URL}/api/bookings`, {
+                const data = await apiCall('/api/bookings', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${AuthToken.get()}`
-                    },
                     body: JSON.stringify({
                         hotelId: parseInt(hotelId),
                         checkInDate: checkInInput.value,
@@ -1560,12 +1551,6 @@ function openBookingModal(roomName, roomPrice) {
                         guests: guests
                     })
                 });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || `HTTP error! status: ${response.status}`);
-                }
 
                 alert('Thank you for your reservation! A confirmation has been sent to your email.');
                 closeAllModals();
@@ -2067,24 +2052,14 @@ async function submitReview() {
 
     try {
         // Submit review to API
-        const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}/reviews`, {
+        const data = await apiCall(`/api/hotels/${hotelId}/reviews`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${AuthToken.get()}`
-            },
             body: JSON.stringify({
                 userRating: parseInt(rating),
                 title: title,
                 comment: content
             })
         });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || `HTTP error! status: ${response.status}`);
-        }
 
         alert('Thank you for your review! It has been submitted successfully.');
 

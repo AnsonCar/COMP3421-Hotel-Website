@@ -1,13 +1,183 @@
 // API Configuration
 const API_BASE_URL = 'http://localhost:3000';
 
+// JWT Token Management
+const AuthToken = {
+    set(token) {
+        localStorage.setItem('authToken', token);
+    },
+
+    get() {
+        return localStorage.getItem('authToken');
+    },
+
+    remove() {
+        localStorage.removeItem('authToken');
+    },
+
+    isValid() {
+        const token = this.get();
+        if (!token) return false;
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const currentTime = Date.now() / 1000;
+            return payload.exp > currentTime;
+        } catch (error) {
+            return false;
+        }
+    },
+
+    getUserFromToken() {
+        const token = this.get();
+        if (!token) return null;
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return {
+                userId: payload.sub,
+                email: payload.email,
+                firstName: payload.firstName,
+                lastName: payload.lastName
+            };
+        } catch (error) {
+            return null;
+        }
+    }
+};
+
+// Generic API Call Function
+async function apiCall(endpoint, options = {}) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            ...options.headers
+        },
+        cache: 'no-cache',
+        ...options
+    };
+
+    // Add authorization header if token exists
+    const token = AuthToken.get();
+    if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    try {
+        const response = await fetch(url, config);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || `HTTP error! status: ${response.status}`);
+        }
+
+        return data;
+    } catch (error) {
+        console.error('API call error:', error);
+        throw error;
+    }
+}
+
+// Authentication API Functions
+const AuthAPI = {
+    async register(userData) {
+        try {
+            const response = await apiCall('/auth/register', {
+                method: 'POST',
+                body: JSON.stringify(userData)
+            });
+            return response;
+        } catch (error) {
+            throw new Error(`Registration failed: ${error.message}`);
+        }
+    },
+
+    async login(credentials) {
+        try {
+            const response = await apiCall('/auth/login', {
+                method: 'POST',
+                body: JSON.stringify(credentials)
+            });
+
+            if (response.token) {
+                AuthToken.set(response.token);
+            }
+
+            return response;
+        } catch (error) {
+            throw new Error(`Login failed: ${error.message}`);
+        }
+    },
+
+    async getUserProfile() {
+        try {
+            const response = await apiCall('/auth/profile');
+            return response.user;
+        } catch (error) {
+            throw new Error(`Failed to get user profile: ${error.message}`);
+        }
+    },
+
+    async updateUserProfile(userData) {
+        try {
+            const response = await apiCall('/auth/profile', {
+                method: 'PUT',
+                body: JSON.stringify(userData)
+            });
+            return response;
+        } catch (error) {
+            throw new Error(`Failed to update user profile: ${error.message}`);
+        }
+    },
+
+    async updatePassword(passwordData) {
+        try {
+            const response = await apiCall('/auth/password', {
+                method: 'PUT',
+                body: JSON.stringify(passwordData)
+            });
+            return response;
+        } catch (error) {
+            throw new Error(`Failed to update password: ${error.message}`);
+        }
+    },
+
+    async deleteAccount() {
+        try {
+            const response = await apiCall('/auth/account', {
+                method: 'DELETE'
+            });
+
+            // Clear token after successful deletion
+            AuthToken.remove();
+
+            return response;
+        } catch (error) {
+            throw new Error(`Failed to delete account: ${error.message}`);
+        }
+    },
+
+    logout() {
+        AuthToken.remove();
+    },
+
+    isLoggedIn() {
+        return AuthToken.isValid();
+    },
+
+    getCurrentUser() {
+        return AuthToken.getUserFromToken();
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
 // Auth Modal Functionality
 const loginModal = document.getElementById('loginModal');
 const openLoginBtn = document.getElementById('openLoginBtn');
 const closeModal = document.getElementById('closeModal');
 
-if (loginModal && openLoginBtn && closeModal) {    
+if (loginModal && openLoginBtn && closeModal) {
     // Tab Elements
     const tabs = document.querySelectorAll('.auth-tab');
     const forms = document.querySelectorAll('.auth-form');
@@ -186,176 +356,6 @@ if (searchInput && searchBtn) {
         }
     }
 }
-
-// JWT Token Management
-const AuthToken = {
-    set(token) {
-        localStorage.setItem('authToken', token);
-    },
-
-    get() {
-        return localStorage.getItem('authToken');
-    },
-
-    remove() {
-        localStorage.removeItem('authToken');
-    },
-
-    isValid() {
-        const token = this.get();
-        if (!token) return false;
-
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            const currentTime = Date.now() / 1000;
-            return payload.exp > currentTime;
-        } catch (error) {
-            return false;
-        }
-    },
-
-    getUserFromToken() {
-        const token = this.get();
-        if (!token) return null;
-
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            return {
-                userId: payload.sub,
-                email: payload.email,
-                firstName: payload.firstName,
-                lastName: payload.lastName
-            };
-        } catch (error) {
-            return null;
-        }
-    }
-};
-
-// Generic API Call Function
-async function apiCall(endpoint, options = {}) {
-    const url = `${API_BASE_URL}${endpoint}`;
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-            ...options.headers
-        },
-        cache: 'no-cache',
-        ...options
-    };
-
-    // Add authorization header if token exists
-    const token = AuthToken.get();
-    if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    try {
-        const response = await fetch(url, config);
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || `HTTP error! status: ${response.status}`);
-        }
-
-        return data;
-    } catch (error) {
-        console.error('API call error:', error);
-        throw error;
-    }
-}
-
-// Authentication API Functions
-const AuthAPI = {
-    async register(userData) {
-        try {
-            const response = await apiCall('/auth/register', {
-                method: 'POST',
-                body: JSON.stringify(userData)
-            });
-            return response;
-        } catch (error) {
-            throw new Error(`Registration failed: ${error.message}`);
-        }
-    },
-
-    async login(credentials) {
-        try {
-            const response = await apiCall('/auth/login', {
-                method: 'POST',
-                body: JSON.stringify(credentials)
-            });
-
-            if (response.token) {
-                AuthToken.set(response.token);
-            }
-
-            return response;
-        } catch (error) {
-            throw new Error(`Login failed: ${error.message}`);
-        }
-    },
-
-    async getUserProfile() {
-        try {
-            const response = await apiCall('/auth/profile');
-            return response.user;
-        } catch (error) {
-            throw new Error(`Failed to get user profile: ${error.message}`);
-        }
-    },
-
-    async updateUserProfile(userData) {
-        try {
-            const response = await apiCall('/auth/profile', {
-                method: 'PUT',
-                body: JSON.stringify(userData)
-            });
-            return response;
-        } catch (error) {
-            throw new Error(`Failed to update user profile: ${error.message}`);
-        }
-    },
-
-    async updatePassword(passwordData) {
-        try {
-            const response = await apiCall('/auth/password', {
-                method: 'PUT',
-                body: JSON.stringify(passwordData)
-            });
-            return response;
-        } catch (error) {
-            throw new Error(`Failed to update password: ${error.message}`);
-        }
-    },
-
-    async deleteAccount() {
-        try {
-            const response = await apiCall('/auth/account', {
-                method: 'DELETE'
-            });
-
-            // Clear token after successful deletion
-            AuthToken.remove();
-
-            return response;
-        } catch (error) {
-            throw new Error(`Failed to delete account: ${error.message}`);
-        }
-    },
-
-    logout() {
-        AuthToken.remove();
-    },
-
-    isLoggedIn() {
-        return AuthToken.isValid();
-    },
-
-    getCurrentUser() {
-        return AuthToken.getUserFromToken();
-    }
-};
 
 // Auth state management functions
 function originalOpenLoginClick(e) {
