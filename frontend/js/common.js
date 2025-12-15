@@ -7,25 +7,12 @@ const loginModal = document.getElementById('loginModal');
 const openLoginBtn = document.getElementById('openLoginBtn');
 const closeModal = document.getElementById('closeModal');
 
-if (loginModal && openLoginBtn && closeModal) {
-    // Form Elements
-    const loginForm = document.getElementById('login-form');
-    const signupForm = document.getElementById('signup-form');
-    const forgotForm = document.getElementById('forgot-form');
-    
+if (loginModal && openLoginBtn && closeModal) {    
     // Tab Elements
     const tabs = document.querySelectorAll('.auth-tab');
     const forms = document.querySelectorAll('.auth-form');
     
-    // Open modal
-    openLoginBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        loginModal.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
-        
-        // Default to showing login form
-        switchToTab('login');
-    });
+    // Open modal handled dynamically based on auth state
     
     // Close modal
     closeModal.addEventListener('click', function() {
@@ -92,52 +79,7 @@ if (loginModal && openLoginBtn && closeModal) {
         });
     }
     
-    // Handle form submissions
-    const loginFormElement = document.getElementById('loginForm');
-    if (loginFormElement) {
-        loginFormElement.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // Here you would typically send the data to a server for authentication
-            console.log(`Login attempt: ${username}`);
-            
-            // Simulate successful login
-            alert('Login successful!');
-            loginModal.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-    }
     
-    const signupFormElement = document.getElementById('signupForm');
-    if (signupFormElement) {
-        signupFormElement.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const fullname = document.getElementById('fullname').value;
-            const email = document.getElementById('email').value;
-            const username = document.getElementById('new-username').value;
-            const password = document.getElementById('new-password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            
-            // Basic validation
-            if (password !== confirmPassword) {
-                alert('Passwords do not match!');
-                return;
-            }
-            
-            // Here you would typically send the data to a server for registration
-            console.log(`Registration attempt: ${username}, ${email}`);
-            
-            // Simulate successful registration
-            alert('Registration successful! You can now log in.');
-            switchToTab('login');
-        });
-    }
     
     const forgotPasswordForm = document.getElementById('forgotPasswordForm');
     if (forgotPasswordForm) {
@@ -298,6 +240,7 @@ async function apiCall(endpoint, options = {}) {
             'Content-Type': 'application/json',
             ...options.headers
         },
+        cache: 'no-cache',
         ...options
     };
 
@@ -414,6 +357,45 @@ const AuthAPI = {
     }
 };
 
+// Auth state management functions
+function originalOpenLoginClick(e) {
+    e.preventDefault();
+    const loginModal = document.getElementById('loginModal');
+    if (loginModal) {
+        loginModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        switchToTab('login');
+    }
+}
+
+function updateLoginButton() {
+    const openLoginBtn = document.getElementById('openLoginBtn');
+    if (!openLoginBtn) return;
+
+    if (AuthAPI.isLoggedIn()) {
+        const user = AuthAPI.getCurrentUser();
+        if (user && user.firstName) {
+            openLoginBtn.innerText = `Welcome, ${user.firstName}`;
+            openLoginBtn.onclick = handleLogout;
+        }
+    } else {
+        openLoginBtn.innerText = 'Login/SignUp';
+        openLoginBtn.onclick = originalOpenLoginClick;
+    }
+}
+
+function handleLogout(e) {
+    e.preventDefault();
+    if (confirm('Are you sure you want to log out?')) {
+        AuthAPI.logout();
+        updateLoginButton();
+        alert('Logged out');
+        if (window.location.pathname.includes('settings.html')) {
+            window.location.href = 'index.html';
+        }
+    }
+}
+
 // Update existing form handlers to use API functions
 if (loginModal && openLoginBtn && closeModal) {
     // ... existing modal code ...
@@ -424,7 +406,7 @@ if (loginModal && openLoginBtn && closeModal) {
         loginFormElement.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            const email = document.getElementById('username').value; // Note: using 'username' field for email
+            const email = document.getElementById('login-email').value;
             const password = document.getElementById('password').value;
 
             try {
@@ -460,7 +442,7 @@ if (loginModal && openLoginBtn && closeModal) {
             try {
                 const result = await AuthAPI.register({ firstName, lastName, email, password });
                 alert('Registration successful! You can now log in.');
-                switchToTab('login');
+                window.location.reload()
             } catch (error) {
                 alert(error.message);
             }
@@ -468,6 +450,23 @@ if (loginModal && openLoginBtn && closeModal) {
     }
 
     // ... existing forgot password handler ...
+
+    // Cache busting for static resources
+    const scripts = document.querySelectorAll('script[src]');
+    const links = document.querySelectorAll('link[href]');
+    const images = document.querySelectorAll('img[src]');
+    
+    function bustCache(el, attr) {
+        if (el[attr]) {
+            el[attr] += (el[attr].includes('?') ? '&' : '?') + 'v=' + Date.now();
+        }
+    }
+    
+    scripts.forEach(el => bustCache(el, 'src'));
+    links.forEach(el => bustCache(el, 'href'));
+    images.forEach(el => bustCache(el, 'src'));
 }
 
+// Initialize login button state on page load
+updateLoginButton();
 });
