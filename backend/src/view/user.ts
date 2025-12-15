@@ -17,7 +17,7 @@ userRouter.post('/register', async (c) => {
   try {
     const { firstName, lastName, email, password } = await c.req.json()
 
-    if (!firstName || !lastName || !email || !password) {
+    if (!firstName?.trim() || !email?.trim() || !password?.trim()) {
       return c.json({ error: 'All fields are required' }, 400)
     }
 
