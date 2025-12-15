@@ -171,6 +171,10 @@ const AuthAPI = {
     }
 };
 
+function handleLogout() {
+    AuthAPI.logout();
+    localStorage.removeItem('userName');
+}
 document.addEventListener('DOMContentLoaded', function() {
 // Auth Modal Functionality
 const loginModal = document.getElementById('loginModal');
@@ -374,9 +378,11 @@ function updateLoginButton() {
 
     if (AuthAPI.isLoggedIn()) {
         const user = AuthAPI.getCurrentUser();
-        if (user && user.firstName) {
-            openLoginBtn.innerText = `Welcome, ${user.firstName}`;
-            openLoginBtn.onclick = handleLogout;
+        const userName = localStorage.getItem('userName') || (user ? user.firstName : '');
+        if (userName) {
+            const userName = localStorage.getItem('userName') || user.firstName;
+            openLoginBtn.innerText = `Welcome, ${userName}`;
+            openLoginBtn.onclick = goToSettings;
         }
     } else {
         openLoginBtn.innerText = 'Login/SignUp';
@@ -384,16 +390,12 @@ function updateLoginButton() {
     }
 }
 
-function handleLogout(e) {
+
+
+
+function goToSettings(e) {
     e.preventDefault();
-    if (confirm('Are you sure you want to log out?')) {
-        AuthAPI.logout();
-        updateLoginButton();
-        alert('Logged out');
-        if (window.location.pathname.includes('settings.html')) {
-            window.location.href = 'index.html';
-        }
-    }
+    window.location.href = 'settings.html';
 }
 
 // Update existing form handlers to use API functions
@@ -411,6 +413,10 @@ if (loginModal && openLoginBtn && closeModal) {
 
             try {
                 const result = await AuthAPI.login({ email, password });
+                const user = AuthAPI.getCurrentUser();
+                if (user && user.firstName) {
+                    localStorage.setItem('userName', user.firstName);
+                }
                 alert('Login successful!');
                 loginModal.classList.remove('active');
                 document.body.style.overflow = '';

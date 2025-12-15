@@ -3,6 +3,12 @@
 // JWT Token Management
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Check login status
+    if (!AuthToken.isValid()) {
+        window.location.href = 'index.html';
+        return;
+    }
+
     // Settings navigation
     const settingsNavItems = document.querySelectorAll('.settings-nav li');
     const settingsSections = document.querySelectorAll('.settings-section');
@@ -316,6 +322,19 @@ document.addEventListener('DOMContentLoaded', function() {
             confirmDeleteCheckbox.checked = false;
             document.getElementById('delete-password').value = '';
             confirmDeleteBtn.disabled = true;
+        });
+    }
+    
+    // Logout functionality
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to log out?')) {
+                handleLogout();
+                alert('Logged out');
+                window.location.href = 'index.html';
+            }
         });
     }
     
